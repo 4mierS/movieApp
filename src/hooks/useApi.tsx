@@ -13,6 +13,14 @@ export interface SearchResult {
     Type: string;
 }
 
+export interface DetailsResult extends SearchResult {
+    imdbRating: string;
+    Genre: string;
+    Director: string;
+    Website: string;
+    Actors: string;
+    Plot: string;
+}
 export interface SearchError {
     Response: "False";
     Error: string;
@@ -24,6 +32,7 @@ export interface SearchResponse {
     totalResults: string;
     Response: "True";
 }
+
 
 export const useApi = () => {
     const url = 'http://www.omdbapi.com/';
@@ -43,7 +52,7 @@ export const useApi = () => {
     };
 
     // getDetails gibt ein einzelnes Suchergebnis zurück
-    const getDetails = async (id: string): Promise<SearchResult> => {
+    const getDetails = async (id: string): Promise<DetailsResult> => {
         const response = await fetch(`${url}?apikey=${apiKey}&i=${id}&plot=full`);
         return await response.json();  // Ein einzelnes SearchResult
     };

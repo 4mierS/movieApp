@@ -14,7 +14,11 @@ import {
   IonList,
   useIonAlert,
   useIonLoading,
+  IonAvatar,
+  IonImg,
+  IonIcon,
 } from "@ionic/react";
+import { videocamOutline, tvOutline, gameControllerOutline } from "ionicons/icons";
 
 const Home: React.FC = () => {
   const { searchData } = useApi();
@@ -60,7 +64,7 @@ const Home: React.FC = () => {
       }
     };
     loadData();
-  }, [searchTerm]);
+  }, [searchTerm, type]);
 
   return (
     <IonPage>
@@ -105,8 +109,15 @@ const Home: React.FC = () => {
           {/* Überprüfe zuerst, ob results ein Array ist */}
           {results && Array.isArray(results) ? (
             results.map((result: SearchResult, index: number) => (
-              <IonItem key={index}>
-                <IonLabel>{result.Title}</IonLabel>
+              <IonItem button key={index} routerLink={`/movies/${result.imdbID}`}>
+                <IonAvatar slot='start'>
+                  <IonImg src={result.Poster}></IonImg>
+                </IonAvatar>
+                <IonLabel className="ion-text-wrap">{result.Title}</IonLabel>
+                {result.Type === "moive" && <IonIcon slot='end' icon={videocamOutline}/>}
+                {result.Type === "series" && <IonIcon slot='end' icon={tvOutline}/>}
+                {result.Type === "game" && <IonIcon slot='end' icon={gameControllerOutline}/>}
+                <IonIcon slot='end' icon={videocamOutline}/>
               </IonItem>
             ))
           ) : (
