@@ -36,7 +36,7 @@ export interface SearchResponse {
 
 export const useApi = () => {
     const url = 'http://www.omdbapi.com/';
-    const apiKey = '8b7fffa0';
+    const apiKey = import.meta.env.VITE_OMDB_API_KEY;
 
     // searchData gibt entweder ein Array von SearchResults oder einen Fehler zurück
     const searchData = async (title: string, type: SearchType): Promise<SearchResponse | SearchError> => {
