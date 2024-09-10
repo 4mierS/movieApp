@@ -70,7 +70,7 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>My first Ionic App</IonTitle>
+          <IonTitle>Search your Movie</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

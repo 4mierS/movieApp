@@ -1,18 +1,22 @@
 import {
   IonBackButton,
+  IonButton,
   IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonImg,
   IonItem,
   IonLabel,
   IonPage,
+  IonRow,
   IonText,
   IonTitle,
   IonToolbar,
@@ -21,16 +25,24 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useApi, { DetailsResult } from "../hooks/useApi";
-import { starHalfOutline, starOutline, star } from "ionicons/icons";
+import { useFavorite } from "./Favorite";
+import {
+  starHalfOutline,
+  starOutline,
+  star,
+  heart,
+  heartOutline,
+} from "ionicons/icons";
 
 interface RouteParams {
   id: string;
 }
 
 const Details: React.FC = () => {
-  const { id } = useParams<RouteParams>(); // Hier holen wir uns den imdbID Parameter
+  const { id } = useParams<RouteParams>();
   const { getDetails } = useApi();
   const [movie, setMovie] = useState<DetailsResult | null>(null);
+  const { isFavorite, toggleFavorite } = useFavorite();
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -55,14 +67,29 @@ const Details: React.FC = () => {
       <IonContent fullscreen>
         {movie ? (
           <IonItem>
-            <IonLabel>
               <IonCard>
-                <IonCardHeader>
-                  <IonCardTitle color="secondary">{movie.Title}</IonCardTitle>
+                <IonCardHeader >
+                  <IonItem>
+                    <IonCardTitle  color="secondary">{movie.Title}</IonCardTitle>
+                    <IonButton
+                      shape="round"
+                      size="small"
+                      slot="end"
+                      onClick={() => toggleFavorite(movie)}
+                    >
+                      <IonIcon
+                        slot="icon-only"
+                        size="small"
+                        icon={isFavorite(movie.imdbID) ? heart : heartOutline}
+                      ></IonIcon>
+                    </IonButton>
+                  </IonItem>
+                  <IonItem>
                   <IonCardSubtitle>{movie.Year}</IonCardSubtitle>
+                  </IonItem>
                 </IonCardHeader>
                 <IonCardContent>
-                  <IonImg src={movie.Poster} className="ion-padding-bottom" />
+                  <IonImg src={movie.Poster}/>
                   <IonItem>
                     {Array.from({ length: 5 }, (_, index) => {
                       if (movie.imdbRating === "N/A") {
@@ -82,7 +109,6 @@ const Details: React.FC = () => {
                           Number(movie.imdbRating) % 2 >= 1 ? true : false;
 
                         if (index < fullStars) {
-                          // Voller Stern
                           return (
                             <IonIcon
                               key={index}
@@ -92,7 +118,6 @@ const Details: React.FC = () => {
                             />
                           );
                         } else if (index === fullStars && halfStar) {
-                          // Halber Stern
                           return (
                             <IonIcon
                               key={index}
@@ -102,7 +127,6 @@ const Details: React.FC = () => {
                             />
                           );
                         } else {
-                          // Leerer Stern
                           return (
                             <IonIcon
                               key={index}
@@ -139,7 +163,6 @@ const Details: React.FC = () => {
                   </IonItem>
                 </IonCardContent>
               </IonCard>
-            </IonLabel>
           </IonItem>
         ) : (
           <p>Loading...</p>

@@ -1,7 +1,12 @@
 import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
+import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
+import Favorite from "./pages/Favorite";
+import { home, library } from 'ionicons/icons';
+import React from "react";
+import { FavoriteProvider } from "./pages/Favorite";
+
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -39,13 +44,28 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
+      <FavoriteProvider>
+      <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/home" component={Home} />
         <Route exact path="/movies/:id" component={Details} />
+        <Route exact path="/favorite" component={Favorite} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
-      </IonRouterOutlet>
+        </IonRouterOutlet>
+        <IonTabBar  slot="bottom">
+        <IonTabButton tab="home" href="/home">
+            <IonIcon icon={home} />
+            <IonLabel>Search</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="Favorite" href="/Favorite">
+            <IonIcon icon={library} />
+            <IonLabel>Favorite</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+      </IonTabs>
+      </FavoriteProvider>
     </IonReactRouter>
   </IonApp>
 );
