@@ -17,11 +17,29 @@ import {
   IonAvatar,
   IonImg,
   IonIcon,
+  IonItemOption,
+  IonItemOptions,
+  IonItemSliding,
+  IonButton,
 } from "@ionic/react";
-import { videocamOutline, tvOutline, gameControllerOutline } from "ionicons/icons";
+import {
+  videocamOutline,
+  tvOutline,
+  gameControllerOutline,
+  glassesOutline,
+  heart,
+  heartOutline,
+  glasses,
+} from "ionicons/icons";
+import { useFavorite } from "./Favorite";
+import { useWatchlist } from "./Watchlist";
 
 const Home: React.FC = () => {
   const { searchData } = useApi();
+
+  //
+  const { isFavorite, toggleFavorite } = useFavorite();
+  const { isWatchlist, toggleWatchlist } = useWatchlist();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [type, setType] = useState<SearchType>(SearchType.all);
@@ -81,8 +99,7 @@ const Home: React.FC = () => {
         </IonHeader>
 
         <IonSearchbar
-          onIonChange={(e: CustomEvent) =>
-            setSearchTerm(e.detail.value!)}
+          onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
           debounce={300}
           value={searchTerm}
           animated={true}
@@ -94,8 +111,7 @@ const Home: React.FC = () => {
             Select SearchType
             <IonSelect
               value={type}
-              onIonChange={(e: CustomEvent) =>
-                setType(e.detail.value!)}
+              onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
             >
               <IonSelectOption value="">All</IonSelectOption>
               <IonSelectOption value="movie">Movie</IonSelectOption>
@@ -107,27 +123,59 @@ const Home: React.FC = () => {
 
         <IonList>
           {/* Überprüfe zuerst, ob results ein Array ist */}
-          {results && Array.isArray(results) ? (
-            results.map((result: SearchResult, index: number) => (
-              <IonItem button key={index} routerLink={`/movies/${result.imdbID}`}>
-                <IonAvatar slot='start'>
-                  <IonImg src={result.Poster}></IonImg>
-                </IonAvatar>
-                <IonLabel className="ion-text-wrap">{result.Title}</IonLabel>
-                {result.Type === "moive" && <IonIcon slot='end' icon={videocamOutline}/>}
-                {result.Type === "series" && <IonIcon slot='end' icon={tvOutline}/>}
-                {result.Type === "game" && <IonIcon slot='end' icon={gameControllerOutline}/>}
-                <IonIcon slot='end' icon={videocamOutline}/>
-              </IonItem>
-            ))
-          ) : (
-            // Zeige eine Fehlermeldung, wenn results ein Fehler ist
-            results && (results as SearchError).Response === "False" && (
-              <IonItem>
-                <IonLabel>{(results as SearchError).Error}</IonLabel>
-              </IonItem>
-            )
-          )}
+          {results && Array.isArray(results)
+            ? results.map((result: SearchResult, index: number) => (
+                <IonItemSliding>
+                  <IonItem
+                    button
+                    key={index}
+                    routerLink={`/movies/${result.imdbID}`}
+                  >
+                    <IonAvatar slot="start">
+                      <IonImg src={result.Poster}></IonImg>
+                    </IonAvatar>
+                    <IonLabel className="ion-text-wrap">
+                      {result.Title}
+                    </IonLabel>
+                    {result.Type === "moive" && (
+                      <IonIcon slot="end" icon={videocamOutline} />
+                    )}
+                    {result.Type === "series" && (
+                      <IonIcon slot="end" icon={tvOutline} />
+                    )}
+                    {result.Type === "game" && (
+                      <IonIcon slot="end" icon={gameControllerOutline} />
+                    )}
+                    <IonIcon slot="end" icon={videocamOutline} />
+                  </IonItem>
+                  <IonItemOptions>
+                    <IonItemOption onClick={() => toggleFavorite(result)}>
+                        <IonIcon
+                          slot="top"
+                          size="small"
+                          icon={
+                            isFavorite(result.imdbID) ? heart : heartOutline
+                          }
+                        ></IonIcon>
+                        Favorite
+                    </IonItemOption>
+                    <IonItemOption color="success" onClick={() => toggleWatchlist(result)}>
+                        <IonIcon
+                          slot="top"
+                          size="small"
+                          icon={isWatchlist(result.imdbID) ? glasses : glassesOutline}
+                        ></IonIcon>
+                        Watched
+                    </IonItemOption>
+                  </IonItemOptions>
+                </IonItemSliding>
+              ))
+            : results &&
+              (results as SearchError).Response === "False" && (
+                <IonItem>
+                  <IonLabel>{(results as SearchError).Error}</IonLabel>
+                </IonItem>
+              )}
         </IonList>
       </IonContent>
     </IonPage>

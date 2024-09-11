@@ -3,9 +3,11 @@ import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, Io
 import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
-import { home, library } from 'ionicons/icons';
+import Watchlist from "./pages/Watchlist";
+import { eye, home, library } from 'ionicons/icons';
 import React from "react";
 import { FavoriteProvider } from "./pages/Favorite";
+import { WatchlistProvider } from "./pages/Watchlist";
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -45,11 +47,13 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <FavoriteProvider>
+      <WatchlistProvider>
       <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/home" component={Home} />
         <Route exact path="/movies/:id" component={Details} />
         <Route exact path="/favorite" component={Favorite} />
+        <Route exact path="/watchlist" component={Watchlist} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -63,8 +67,13 @@ const App: React.FC = () => (
             <IonIcon icon={library} />
             <IonLabel>Favorite</IonLabel>
           </IonTabButton>
+          <IonTabButton tab="watchlist" href="/watchlist">
+            <IonIcon icon={eye} />
+            <IonLabel>Watchlist</IonLabel>
+          </IonTabButton>
         </IonTabBar>
       </IonTabs>
+      </WatchlistProvider>
       </FavoriteProvider>
     </IonReactRouter>
   </IonApp>

@@ -77,13 +77,13 @@ export const FavoriteProvider: React.FC<{ children: React.ReactNode }> = ({
 };
 
 const Favorite: React.FC = () => {
-  const { favorites, toggleFavorite } = useFavorite(); // Hole toggleFavorite und favorites aus dem Kontext
+  const { favorites, toggleFavorite } = useFavorite(); 
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
 
   const scrollToTop = () => {
-    contentRef.current?.scrollToTop(500); // IonContent hat eine scrollToTop Methode
+    contentRef.current?.scrollToTop(500); 
   };
 
   const checkScrollable = () => {
@@ -91,7 +91,7 @@ const Favorite: React.FC = () => {
       contentRef.current.getScrollElement().then((el) => {
         const scrollHeight = el.scrollHeight;
         const offsetHeight = el.offsetHeight;
-        setIsContentScrollable(scrollHeight - 1 > offsetHeight); // Überprüfe, ob Inhalt scrollbar ist
+        setIsContentScrollable(scrollHeight - 1 > offsetHeight);
       });
     }
   };
