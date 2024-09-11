@@ -91,22 +91,22 @@ const Favorite: React.FC = () => {
       contentRef.current.getScrollElement().then((el) => {
         const scrollHeight = el.scrollHeight;
         const offsetHeight = el.offsetHeight;
-        setIsContentScrollable(scrollHeight > offsetHeight); // Überprüfe, ob Inhalt scrollbar ist
+        setIsContentScrollable(scrollHeight - 1 > offsetHeight); // Überprüfe, ob Inhalt scrollbar ist
       });
     }
   };
 
   useEffect(() => {
-    // Wir verwenden setTimeout, um sicherzustellen, dass der Inhalt vollständig gerendert ist
+  
     const timer = setTimeout(() => {
       checkScrollable();
-    }, 300); // Kleiner Zeitpuffer von 300ms
+    }, 200);
 
-    return () => clearTimeout(timer); // Cleanup, um sicherzustellen, dass es keine Memory-Leaks gibt
+    return () => clearTimeout(timer); 
   }, []);
 
   useEffect(() => {
-    checkScrollable(); // Scrollbarkeit bei jeder Änderung der Favoriten prüfen
+    checkScrollable(); 
   }, [favorites]);
 
   return (
@@ -124,7 +124,8 @@ const Favorite: React.FC = () => {
                 <IonAvatar slot="start">
                   <IonImg alt="MovieImage" src={fav.Poster} />
                 </IonAvatar>
-                <IonLabel>{fav.Title}</IonLabel>
+                <h3>{fav.Title}</h3>
+                <IonLabel slot="end">{fav.Year}</IonLabel>
                 <IonButton
                   shape="round"
                   slot="end"
@@ -153,13 +154,13 @@ const Favorite: React.FC = () => {
             </div>
           )}
         </IonList>
-        {isContentScrollable && (
+        {isContentScrollable == true ? (
           <IonItem>
             <IonButton onClick={scrollToTop} slot="end" color={"secondary"}>
               <IonIcon icon={chevronUpCircleOutline} slot="icon-only" />
             </IonButton>
           </IonItem>
-        )}
+        ) : null}
       </IonContent>
     </IonPage>
   );
