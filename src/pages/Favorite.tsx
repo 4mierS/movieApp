@@ -14,70 +14,10 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { chevronUpCircleOutline, heart, sadOutline } from "ionicons/icons";
-
-interface FavoriteProps {
-  imdbID: string;
-  Title: string;
-  Year: string;
-  Poster: string;
-  Type: string;
-}
-
-interface FavoriteState {
-  favorites: FavoriteProps[];
-  isFavorite: (imdbID: string) => boolean;
-  toggleFavorite: (favorite: FavoriteProps) => void;
-}
-
-const FavoriteContext = React.createContext<FavoriteState>({
-  favorites: [],
-  isFavorite: () => false,
-  toggleFavorite: () => {},
-});
-
-export const useFavorite = () => {
-  return React.useContext(FavoriteContext);
-};
-
-export const FavoriteProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [favorites, setFavorites] = React.useState<FavoriteProps[]>(() => {
-    const storedFavorites = localStorage.getItem("favorites");
-    return storedFavorites ? JSON.parse(storedFavorites) : [];
-  });
-
-  const isFavorite = (imdbID: string) => {
-    return favorites.some((fav) => fav.imdbID === imdbID);
-  };
-
-  const toggleFavorite = (favorite: FavoriteProps) => {
-    if (isFavorite(favorite.imdbID)) {
-      setFavorites((prev) => {
-        const newFavorites = prev.filter(
-          (fav) => fav.imdbID !== favorite.imdbID
-        );
-        localStorage.setItem("favorites", JSON.stringify(newFavorites));
-        return newFavorites;
-      });
-    } else {
-      setFavorites((prev) => {
-        const newFavorites = [...prev, favorite];
-        localStorage.setItem("favorites", JSON.stringify(newFavorites));
-        return newFavorites;
-      });
-    }
-  };
-
-  return (
-    <FavoriteContext.Provider value={{ favorites, isFavorite, toggleFavorite }}>
-      {children}
-    </FavoriteContext.Provider>
-  );
-};
+import { useList } from "../components/Lists";
 
 const Favorite: React.FC = () => {
-  const { favorites, toggleFavorite } = useFavorite(); 
+  const { favorites, toggleItem, isInList } = useList();
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
@@ -129,7 +69,7 @@ const Favorite: React.FC = () => {
                 <IonButton
                   shape="round"
                   slot="end"
-                  onClick={() => toggleFavorite(fav)}
+                  onClick={() => toggleItem(fav, "favorites")}
                 >
                   <IonIcon slot="icon-only" icon={heart}></IonIcon>
                 </IonButton>

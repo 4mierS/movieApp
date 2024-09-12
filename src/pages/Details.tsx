@@ -25,7 +25,6 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useApi, { DetailsResult } from "../hooks/useApi";
-import { useFavorite } from "./Favorite";
 import {
   starHalfOutline,
   starOutline,

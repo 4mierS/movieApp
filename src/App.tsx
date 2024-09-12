@@ -6,8 +6,7 @@ import Favorite from "./pages/Favorite";
 import Watchlist from "./pages/Watchlist";
 import { eye, home, library } from 'ionicons/icons';
 import React from "react";
-import { FavoriteProvider } from "./pages/Favorite";
-import { WatchlistProvider } from "./pages/Watchlist";
+import { ListProvider } from "./components/Lists";
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -46,8 +45,7 @@ setupIonicReact();
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
-      <FavoriteProvider>
-      <WatchlistProvider>
+    <ListProvider>
       <IonTabs>
       <IonRouterOutlet>
         <Route exact path="/home" component={Home} />
@@ -73,8 +71,7 @@ const App: React.FC = () => (
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
-      </WatchlistProvider>
-      </FavoriteProvider>
+      </ListProvider>
     </IonReactRouter>
   </IonApp>
 );

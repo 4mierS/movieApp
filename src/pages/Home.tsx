@@ -31,15 +31,13 @@ import {
   heartOutline,
   glasses,
 } from "ionicons/icons";
-import { useFavorite } from "./Favorite";
-import { useWatchlist } from "./Watchlist";
+import { useList } from "../components/Lists";
 
 const Home: React.FC = () => {
   const { searchData } = useApi();
 
   //
-  const { isFavorite, toggleFavorite } = useFavorite();
-  const { isWatchlist, toggleWatchlist } = useWatchlist();
+  const {favorites, watchlist, toggleItem, isInList } = useList();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [type, setType] = useState<SearchType>(SearchType.all);
@@ -125,10 +123,9 @@ const Home: React.FC = () => {
           {/* Überprüfe zuerst, ob results ein Array ist */}
           {results && Array.isArray(results)
             ? results.map((result: SearchResult, index: number) => (
-                <IonItemSliding>
+                <IonItemSliding key={index}>
                   <IonItem
                     button
-                    key={index}
                     routerLink={`/movies/${result.imdbID}`}
                   >
                     <IonAvatar slot="start">
@@ -149,21 +146,21 @@ const Home: React.FC = () => {
                     <IonIcon slot="end" icon={videocamOutline} />
                   </IonItem>
                   <IonItemOptions>
-                    <IonItemOption onClick={() => toggleFavorite(result)}>
+                    <IonItemOption onClick={() => toggleItem(result, "favorites")}>
                         <IonIcon
                           slot="top"
                           size="small"
                           icon={
-                            isFavorite(result.imdbID) ? heart : heartOutline
+                            isInList(result.imdbID, "favorites") ? heart : heartOutline
                           }
                         ></IonIcon>
                         Favorite
                     </IonItemOption>
-                    <IonItemOption color="success" onClick={() => toggleWatchlist(result)}>
+                    <IonItemOption color="success" onClick={() => toggleItem(result, "watchlist")}>
                         <IonIcon
                           slot="top"
                           size="small"
-                          icon={isWatchlist(result.imdbID) ? glasses : glassesOutline}
+                          icon={isInList(result.imdbID, "watchlist") ? glasses : glassesOutline}
                         ></IonIcon>
                         Watched
                     </IonItemOption>
