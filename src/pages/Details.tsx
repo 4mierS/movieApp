@@ -32,6 +32,7 @@ import {
   heart,
   heartOutline,
 } from "ionicons/icons";
+import { useList } from "../components/Lists";
 
 interface RouteParams {
   id: string;
@@ -41,7 +42,7 @@ const Details: React.FC = () => {
   const { id } = useParams<RouteParams>();
   const { getDetails } = useApi();
   const [movie, setMovie] = useState<DetailsResult | null>(null);
-  const { isFavorite, toggleFavorite } = useFavorite();
+  const { favorites, toggleItem, isInList } = useList();
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -74,12 +75,12 @@ const Details: React.FC = () => {
                       shape="round"
                       size="small"
                       slot="end"
-                      onClick={() => toggleFavorite(movie)}
+                      onClick={() => toggleItem(movie, "favorites")}
                     >
                       <IonIcon
                         slot="icon-only"
                         size="small"
-                        icon={isFavorite(movie.imdbID) ? heart : heartOutline}
+                        icon={isInList(movie.imdbID, "favorites") ? heart : heartOutline}
                       ></IonIcon>
                     </IonButton>
                   </IonItem>
