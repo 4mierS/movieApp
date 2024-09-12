@@ -1,18 +1,17 @@
 import React, { useContext, useState, useEffect, createContext } from "react";
 
-// Allgemeine Schnittstelle für Listenelemente
 interface ListItem {
   imdbID: string;
   Title: string;
   Year: string;
   Poster: string;
   Type: string;
+  EpisodeCounter: number;
+  SeasonCounter: number;
 }
 
-// Liste-Typen für Local Storage Schlüssel
 export type ListType = "favorites" | "watchlist";
 
-// Allgemeine Schnittstelle für den Listen-Status
 interface ListState {
   favorites: ListItem[];
   watchlist: ListItem[];
@@ -20,7 +19,6 @@ interface ListState {
   toggleItem: (item: ListItem, typeOfList: ListType) => void;
 }
 
-// Erstelle einen generischen Listen-Kontext
 const ListContext = createContext<ListState>({
   favorites: [],
   watchlist: [],
@@ -28,7 +26,6 @@ const ListContext = createContext<ListState>({
   toggleItem: () => {},
 });
 
-// Verwende den Kontext in deinen Komponenten
 export const useList = () => {
   return useContext(ListContext);
 };

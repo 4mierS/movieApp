@@ -146,7 +146,7 @@ const Home: React.FC = () => {
                     <IonIcon slot="end" icon={videocamOutline} />
                   </IonItem>
                   <IonItemOptions>
-                    <IonItemOption onClick={() => toggleItem(result, "favorites")}>
+                    <IonItemOption onClick={() => toggleItem({ ...result, EpisodeCounter: 0, SeasonCounter: 0 }, "favorites")}>
                         <IonIcon
                           slot="top"
                           size="small"
@@ -156,7 +156,7 @@ const Home: React.FC = () => {
                         ></IonIcon>
                         Favorite
                     </IonItemOption>
-                    <IonItemOption color="success" onClick={() => toggleItem(result, "watchlist")}>
+                    <IonItemOption color="success" onClick={() => toggleItem({ ...result, EpisodeCounter: 0, SeasonCounter: 0 }, "watchlist")}>
                         <IonIcon
                           slot="top"
                           size="small"
