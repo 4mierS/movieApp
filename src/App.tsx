@@ -1,12 +1,13 @@
-import { Redirect, Route } from "react-router-dom";
-import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
-import { IonReactRouter } from "@ionic/react-router";
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import Watchlist from "./pages/Watchlist";
-import { eye, home, library } from 'ionicons/icons';
-import React from "react";
+import RandomSearch from "./pages/RandomSearch";
+import { Redirect, Route } from "react-router-dom";
+import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from "@ionic/react";
+import { IonReactRouter } from "@ionic/react-router";
 import { ListProvider } from "./components/Lists";
+import { eye, home, library, shuffle } from 'ionicons/icons';
+import React from "react";
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -52,6 +53,7 @@ const App: React.FC = () => (
         <Route exact path="/movies/:id" component={Details} />
         <Route exact path="/favorite" component={Favorite} />
         <Route exact path="/watchlist" component={Watchlist} />
+        <Route exact path="/random" component={RandomSearch} />
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -68,6 +70,10 @@ const App: React.FC = () => (
           <IonTabButton tab="watchlist" href="/watchlist">
             <IonIcon icon={eye} />
             <IonLabel>Watchlist</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="random" href="/random">
+            <IonIcon icon={shuffle} />
+            <IonLabel>Random</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
