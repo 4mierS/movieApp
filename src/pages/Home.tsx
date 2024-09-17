@@ -50,7 +50,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     if (searchTerm === "") {
-      setResults(null);
+      setResults([]);
       return;
     }
     const loadData = async () => {
@@ -66,10 +66,8 @@ const Home: React.FC = () => {
             message: result.Error,
             buttons: ["OK"],
           });
-          console.log(`Error: ` + result.Error);
         } else {
           setResults(result.Search);
-          console.log(`Search is: `, result);
         }
       } catch (error) {
         console.error("Error fetching data: ", error);
