@@ -33,12 +33,25 @@ import {
 } from "ionicons/icons";
 import { useList } from "../components/Lists";
 
+
+/**
+ * Hier kann man nach Filmen und Serien suchen.
+ * 
+ * Die Komponente Home zeigt die Suchergebnisse an.
+ *
+ * @return {*} 
+ */
 const Home: React.FC = () => {
   const { searchData } = useApi();
-
-  //
   const {favorites, watchlist, toggleItem, isInList } = useList();
 
+  /**
+   * State für die Suchbegriffe und den Suchtyp.
+   * 
+   * @param {string} searchTerm
+   * @param {SearchType} type
+   * @param {(SearchResult[] | SearchError | null)} results
+   */
   const [searchTerm, setSearchTerm] = useState("");
   const [type, setType] = useState<SearchType>(SearchType.all);
   const [results, setResults] = useState<SearchResult[] | SearchError | null>(
@@ -48,6 +61,7 @@ const Home: React.FC = () => {
   const [presentAlert] = useIonAlert();
   const [loading, dismiss] = useIonLoading();
 
+  
   useEffect(() => {
     if (searchTerm === "") {
       setResults([]);

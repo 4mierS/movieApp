@@ -23,19 +23,34 @@ import { heart, heartOutline, sadOutline } from "ionicons/icons";
 import { useList } from "../components/Lists";
 import { Style } from "@capacitor/status-bar";
 
+/**
+ * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
+ *
+ * @return {*}
+ */
 const Watchlist: React.FC = () => {
   const { watchlist, toggleItem, isInList } = useList();
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
 
+  /**
+   * Scrollt zum Anfang der Liste.
+   *
+   * @returns {void}
+   */
   const scrollToTop = () => {
     contentRef.current?.scrollToTop(500);
   };
 
+  /**
+   * Überprüft, ob die Liste scrollbar ist.
+   *
+   * @returns {void}
+   */
   const checkScrollable = () => {
     if (contentRef.current) {
-      contentRef.current.getScrollElement().then((el) => {
+      contentRef.current.getScrollElement().then((el: HTMLElement) => {
         const scrollHeight = el.scrollHeight;
         const offsetHeight = el.offsetHeight;
         setIsContentScrollable(scrollHeight - 1 > offsetHeight);
@@ -57,7 +72,11 @@ const Watchlist: React.FC = () => {
 
   //FIXME: Github Issue #7
   //TODO: Implement the incrementSeasonCounter and incrementEpisodeCounter functions
-  // Function to handle season counter increment
+  /**
+   * Funktion zum Inkrementieren des Season-Counters.
+   *
+   * @param {*} item
+   */
   const incrementSeasonCounter = (item: any) => {
     if (item.SeasonCounter === undefined) {
       item.SeasonCounter = 1;
@@ -67,7 +86,11 @@ const Watchlist: React.FC = () => {
     // You might need to update the state here if necessary
   };
 
-  // Function to handle episode counter increment
+  /**
+   * Funktion zum Inkrementieren des Episode-Counters.
+   *
+   * @param {*} item
+   */
   const incrementEpisodeCounter = (item: any) => {
     if (item.EpisodeCounter === undefined) {
       item.EpisodeCounter = 1;
@@ -77,10 +100,13 @@ const Watchlist: React.FC = () => {
     // You might need to update the state here if necessary
   };
 
+  /**
+   * Funktion zum Behandeln des IonSwipe-Events.
+   *
+   */
   const handleIonSwipe = () => {
     console.log("Swiped");
-  }
-
+  };
 
   return (
     <IonPage>
@@ -92,76 +118,83 @@ const Watchlist: React.FC = () => {
       <IonContent>
         <IonList lines="inset">
           {watchlist.length > 0 ? (
-            watchlist.map((list, index) => (
-              <IonItemSliding key={index}>
-                <IonItemOptions  side="start" onIonSwipe={() => {handleIonSwipe()}}>
-                  <IonItemOption
-                    expandable
-                    onClick={() => {
-                      incrementSeasonCounter(list);
+            watchlist
+              .map((list, index) => (
+                <IonItemSliding key={index}>
+                  <IonItemOptions
+                    side="start"
+                    onIonSwipe={() => {
+                      handleIonSwipe();
                     }}
                   >
-                    <IonIcon
-                      slot="icon-only"
-                      size="small"
-                      icon={
-                        isInList(list.imdbID, "favorites")
-                          ? heart
-                          : heartOutline
-                      }
-                    />
-                  </IonItemOption>
-                </IonItemOptions>
-                <IonItem>
-                  <IonAvatar slot="start">
-                    <IonImg src={list.Poster}></IonImg>
-                  </IonAvatar>
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <IonLabel className="ion-text-wrap">
-                          {list.Title}
-                        </IonLabel>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol size="auto">
-                        <IonLabel>
-                          {list.SeasonCounter !== undefined
-                            ? `Seasons: ${list.SeasonCounter}`
-                            : ""}
-                        </IonLabel>
-                      </IonCol>
-                      <IonCol size="auto">
-                        <IonLabel>
-                          {list.EpisodeCounter !== undefined
-                            ? `Episodes: ${list.EpisodeCounter}`
-                            : ""}
-                        </IonLabel>
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonItem>
-                <IonItemOptions>
-                  <IonItemOption
-                    expandable
-                    onClick={() => {
-                      incrementEpisodeCounter(list);
-                    }}
-                  >
-                    <IonIcon
-                      slot="icon-only"
-                      size="small"
-                      icon={
-                        isInList(list.imdbID, "favorites")
-                          ? heart
-                          : heartOutline
-                      }
-                    />
-                  </IonItemOption>
-                </IonItemOptions>
-              </IonItemSliding>
-            )).toReversed()
+                    <IonItemOption
+                      expandable
+                      onClick={() => {
+                        incrementSeasonCounter(list);
+                      }}
+                    >
+                      <IonIcon
+                        slot="icon-only"
+                        size="small"
+                        icon={
+                          isInList(list.imdbID, "favorites")
+                            ? heart
+                            : heartOutline
+                        }
+                      />
+                    </IonItemOption>
+                  </IonItemOptions>
+                  <IonItem>
+                    <IonAvatar slot="start">
+                      <IonImg src={list.Poster}></IonImg>
+                    </IonAvatar>
+                    <IonGrid>
+                      <IonRow>
+                        <IonCol>
+                          <IonLabel className="ion-text-wrap">
+                            {list.Title}
+                          </IonLabel>
+                        </IonCol>
+                      </IonRow>
+                      <IonRow>
+                        <IonCol size="auto">
+                          <IonLabel>
+                            {list.SeasonCounter !== undefined
+                              ? `Seasons: ${list.SeasonCounter}`
+                              : ""}
+                          </IonLabel>
+                        </IonCol>
+                        <IonCol size="auto">
+                          <IonLabel>
+                            {list.EpisodeCounter !== undefined
+                              ? `Episodes: ${list.EpisodeCounter}`
+                              : ""}
+                          </IonLabel>
+                        </IonCol>
+                      </IonRow>
+                    </IonGrid>
+                  </IonItem>
+                  <IonItemOptions>
+                    <IonItemOption
+                      expandable
+                      onClick={() => {
+                        incrementEpisodeCounter(list);
+                      }}
+                    >
+                      <IonIcon
+                        slot="icon-only"
+                        size="small"
+                        icon={
+                          isInList(list.imdbID, "favorites")
+                            ? heart
+                            : heartOutline
+                        }
+                      />
+                    </IonItemOption>
+                  </IonItemOptions>
+                </IonItemSliding>
+              ))
+              .toReversed()
           ) : (
             <IonItem>
               <IonIcon icon={sadOutline} slot="start" />

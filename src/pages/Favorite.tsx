@@ -16,19 +16,34 @@ import {
 import { chevronUpCircleOutline, heart, sadOutline } from "ionicons/icons";
 import { useList } from "../components/Lists";
 
+/**
+ * Die Komponente Favorite zeigt die favorisierten Filme an.
+ *
+ * @return {*} 
+ */
 const Favorite: React.FC = () => {
   const { favorites, toggleItem, isInList } = useList();
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
 
+  /**
+   * Scrollt zum Anfang der Liste.
+   * 
+   * @returns {void}
+   */
   const scrollToTop = () => {
     contentRef.current?.scrollToTop(500); 
   };
 
+  /**
+   * Überprüft, ob die Liste scrollbar ist.
+   * 
+   * @returns {void}
+   */
   const checkScrollable = () => {
     if (contentRef.current) {
-      contentRef.current.getScrollElement().then((el) => {
+      contentRef.current.getScrollElement().then((el: HTMLElement) => {
         const scrollHeight = el.scrollHeight;
         const offsetHeight = el.offsetHeight;
         setIsContentScrollable(scrollHeight - 1 > offsetHeight);
@@ -36,6 +51,7 @@ const Favorite: React.FC = () => {
     }
   };
 
+  
   useEffect(() => {
   
     const timer = setTimeout(() => {
@@ -76,13 +92,7 @@ const Favorite: React.FC = () => {
               </IonItem>
             ))
           ) : (
-            <div
-              style={{
-                textAlign: "center",
-                paddingTop: "50px",
-                justifyContent: "center",
-              }}
-            >
+            <div className="centered-div">
               <IonIcon
                 icon={sadOutline}
                 color="danger"

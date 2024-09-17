@@ -1,5 +1,11 @@
+import { IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React, { useState, useEffect } from 'react';
 
+/**
+ * Die Komponente RandomSearch zeigt einen zufälligen Film nach Genre an.
+ *
+ * @return {*} 
+ */
 const RandomSearch: React.FC = () => {
     const [randomMovie, setRandomMovie] = useState<string>('');
 
@@ -18,10 +24,13 @@ const RandomSearch: React.FC = () => {
     }, []);
 
     return (
-        <div>
-            <h1>Random Movie</h1>
-            <p>{randomMovie}</p>
-        </div>
+        <IonPage>
+            <IonHeader>
+        <IonToolbar>
+          <IonTitle>Random</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+        </IonPage>
     );
 };
 
