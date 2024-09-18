@@ -17,6 +17,8 @@ interface ListState {
   watchlist: ListItem[];
   isInList: (imdbID: string, typeOfList: ListType) => boolean;
   toggleItem: (item: ListItem, typeOfList: ListType) => void;
+  SeasonCounter: (item: ListItem) => void;
+  EpisodeCounter: (item: ListItem) => void;
 }
 
 const ListContext = createContext<ListState>({
@@ -24,6 +26,8 @@ const ListContext = createContext<ListState>({
   watchlist: [],
   isInList: () => false,
   toggleItem: () => {},
+  SeasonCounter: () => {},
+  EpisodeCounter: () => {},
 });
 
 export const useList = () => {
@@ -92,9 +96,29 @@ export const ListProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const SeasonCounter = (item: ListItem) => {
+    if (item.SeasonCounter === undefined) {
+      item.SeasonCounter = 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    } else {
+      item.SeasonCounter += 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    }
+  };
+  
+  const EpisodeCounter = (item: ListItem) => {
+    if (item.EpisodeCounter === undefined) {
+      item.EpisodeCounter = 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    } else {
+      item.EpisodeCounter += 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    }
+  };
+
   return (
     <ListContext.Provider
-      value={{ favorites, watchlist, isInList, toggleItem }}
+      value={{ favorites, watchlist, EpisodeCounter, SeasonCounter, isInList, toggleItem }}
     >
       {children}
     </ListContext.Provider>

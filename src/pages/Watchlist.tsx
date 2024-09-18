@@ -20,8 +20,8 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { heart, heartOutline, sadOutline } from "ionicons/icons";
-import { useList } from "../components/Lists";
-import { Style } from "@capacitor/status-bar";
+import { ListType, useList } from "../components/Lists";
+
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -29,7 +29,8 @@ import { Style } from "@capacitor/status-bar";
  * @return {*}
  */
 const Watchlist: React.FC = () => {
-  const { watchlist, toggleItem, isInList } = useList();
+  const { watchlist, SeasonCounter, EpisodeCounter, isInList } = useList();
+  const [showMap, setShowMap] = useState(false);
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
@@ -73,39 +74,27 @@ const Watchlist: React.FC = () => {
   //FIXME: Github Issue #7
   //TODO: Implement the incrementSeasonCounter and incrementEpisodeCounter functions
   /**
-   * Funktion zum Inkrementieren des Season-Counters.
-   *
-   * @param {*} item
-   */
-  const incrementSeasonCounter = (item: any) => {
-    if (item.SeasonCounter === undefined) {
-      item.SeasonCounter = 1;
-    } else {
-      item.SeasonCounter += 1;
-    }
-    // You might need to update the state here if necessary
-  };
-
-  /**
-   * Funktion zum Inkrementieren des Episode-Counters.
-   *
-   * @param {*} item
-   */
-  const incrementEpisodeCounter = (item: any) => {
-    if (item.EpisodeCounter === undefined) {
-      item.EpisodeCounter = 1;
-    } else {
-      item.EpisodeCounter += 1;
-    }
-    // You might need to update the state here if necessary
-  };
-
-  /**
    * Funktion zum Behandeln des IonSwipe-Events.
    *
    */
   const handleIonSwipe = () => {
     console.log("Swiped");
+  };
+
+  const handleEpisodeCounterClick = (list: any) => {
+    EpisodeCounter(list);
+    setShowMap(true);
+    toggleShowMap();
+  };
+
+  const handleSeasonCounterClick = (list: any) => {
+    SeasonCounter(list);
+    setShowMap(true);
+    toggleShowMap();
+  };
+
+  const toggleShowMap = () => {
+    setShowMap(!showMap);
   };
 
   return (
@@ -130,7 +119,7 @@ const Watchlist: React.FC = () => {
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        incrementSeasonCounter(list);
+                        handleSeasonCounterClick(list);
                       }}
                     >
                       <IonIcon
@@ -178,7 +167,7 @@ const Watchlist: React.FC = () => {
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        incrementEpisodeCounter(list);
+                        handleEpisodeCounterClick(list);
                       }}
                     >
                       <IonIcon
