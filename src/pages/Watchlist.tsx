@@ -20,8 +20,7 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import { heart, heartOutline, sadOutline } from "ionicons/icons";
-import { ListType, useList } from "../components/Lists";
-
+import { useList } from "../components/Lists";
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -29,8 +28,7 @@ import { ListType, useList } from "../components/Lists";
  * @return {*}
  */
 const Watchlist: React.FC = () => {
-  const { watchlist, SeasonCounter, EpisodeCounter, isInList } = useList();
-  const [showMap, setShowMap] = useState(false);
+  const { watchlist, handleCounterClick, isInList } = useList();
 
   const contentRef = useRef<IonContent>(null);
   const [isContentScrollable, setIsContentScrollable] = useState(false);
@@ -81,22 +79,6 @@ const Watchlist: React.FC = () => {
     console.log("Swiped");
   };
 
-  const handleEpisodeCounterClick = (list: any) => {
-    EpisodeCounter(list);
-    setShowMap(true);
-    toggleShowMap();
-  };
-
-  const handleSeasonCounterClick = (list: any) => {
-    SeasonCounter(list);
-    setShowMap(true);
-    toggleShowMap();
-  };
-
-  const toggleShowMap = () => {
-    setShowMap(!showMap);
-  };
-
   return (
     <IonPage>
       <IonHeader>
@@ -113,13 +95,13 @@ const Watchlist: React.FC = () => {
                   <IonItemOptions
                     side="start"
                     onIonSwipe={() => {
-                      handleIonSwipe();
+                      handleCounterClick(list, "SeasonCounter", "decrement");
                     }}
                   >
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        handleSeasonCounterClick(list);
+                        handleCounterClick(list, "SeasonCounter", "increment");
                       }}
                     >
                       <IonIcon
@@ -163,11 +145,15 @@ const Watchlist: React.FC = () => {
                       </IonRow>
                     </IonGrid>
                   </IonItem>
-                  <IonItemOptions>
+                  <IonItemOptions
+                    onIonSwipe={() => {
+                      handleCounterClick(list, "EpisodeCounter", "decrement");
+                    }}
+                  >
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        handleEpisodeCounterClick(list);
+                        handleCounterClick(list, "EpisodeCounter", "increment");
                       }}
                     >
                       <IonIcon

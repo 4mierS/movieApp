@@ -11,14 +11,19 @@ interface ListItem {
 }
 
 export type ListType = "favorites" | "watchlist";
+export type CounterType = "EpisodeCounter" | "SeasonCounter";
+export type count = "increment" | "decrement";
 
 interface ListState {
   favorites: ListItem[];
   watchlist: ListItem[];
   isInList: (imdbID: string, typeOfList: ListType) => boolean;
   toggleItem: (item: ListItem, typeOfList: ListType) => void;
-  SeasonCounter: (item: ListItem) => void;
-  EpisodeCounter: (item: ListItem) => void;
+  handleCounterClick: (
+    list: ListItem,
+    cType: CounterType,
+    count: count
+  ) => void;
 }
 
 const ListContext = createContext<ListState>({
@@ -26,8 +31,7 @@ const ListContext = createContext<ListState>({
   watchlist: [],
   isInList: () => false,
   toggleItem: () => {},
-  SeasonCounter: () => {},
-  EpisodeCounter: () => {},
+  handleCounterClick: () => {},
 });
 
 export const useList = () => {
@@ -38,6 +42,8 @@ export const useList = () => {
 export const ListProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const [showMap, setShowMap] = useState(false);
+
   // Favoriten und Watchlist getrennt speichern
   const [favorites, setFavorites] = useState<ListItem[]>(() => {
     const storedFavorites = localStorage.getItem("favorites");
@@ -96,7 +102,7 @@ export const ListProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const SeasonCounter = (item: ListItem) => {
+  const SeasonIncrement = (item: ListItem) => {
     if (item.SeasonCounter === undefined) {
       item.SeasonCounter = 1;
       localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -105,8 +111,8 @@ export const ListProvider: React.FC<{ children: React.ReactNode }> = ({
       localStorage.setItem("watchlist", JSON.stringify(watchlist));
     }
   };
-  
-  const EpisodeCounter = (item: ListItem) => {
+
+  const EpisodeIncrement = (item: ListItem) => {
     if (item.EpisodeCounter === undefined) {
       item.EpisodeCounter = 1;
       localStorage.setItem("watchlist", JSON.stringify(watchlist));
@@ -116,9 +122,56 @@ export const ListProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const SeasonDecrement = (item: ListItem) => {
+    if (item.SeasonCounter !== undefined && item.SeasonCounter > 1) {
+      item.SeasonCounter -= 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    }
+  };
+
+  const EpisodeDecrement = (item: ListItem) => {
+    if (item.EpisodeCounter !== undefined && item.EpisodeCounter > 1) {
+      item.EpisodeCounter -= 1;
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    }
+  };
+
+  const handleCounterClick = (
+    list: ListItem,
+    cType: CounterType,
+    count: count
+  ) => {
+    if (count === "increment") {
+      if (cType === "EpisodeCounter") {
+        EpisodeIncrement(list);
+      } else {
+        SeasonIncrement(list);
+      }
+    } else {
+      if (cType === "EpisodeCounter") {
+        EpisodeDecrement(list);
+      } else {
+        SeasonDecrement(list);
+      }
+    }
+
+    setShowMap(true);
+    toggleShowMap();
+  };
+
+  const toggleShowMap = () => {
+    setShowMap(!showMap);
+  };
+
   return (
     <ListContext.Provider
-      value={{ favorites, watchlist, EpisodeCounter, SeasonCounter, isInList, toggleItem }}
+      value={{
+        favorites,
+        watchlist,
+        handleCounterClick,
+        isInList,
+        toggleItem,
+      }}
     >
       {children}
     </ListContext.Provider>
