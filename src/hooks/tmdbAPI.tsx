@@ -68,15 +68,17 @@ export const useTMDBApi = () => {
     Genre?: string[],
     GenreRelations?: streamingAvailability.SearchShowsByFiltersGenresRelationEnum,
     Keyword?: string,
+    SeriesGranularity?: streamingAvailability.GetShowSeriesGranularityEnum,
+    RatingMin?: number,
   ) => {
     const data = await client.showsApi.searchShowsByFilters({
-        country: "de",
+        country: Country,
         showType: ShowType,
         genres: Genre,
         genresRelation: GenreRelations,
-        ratingMin: 7.5,
+        ratingMin: RatingMin,
         keyword: Keyword,
-        seriesGranularity: "show",
+        seriesGranularity: SeriesGranularity,
         });
     console.log(data);
     };

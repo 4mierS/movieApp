@@ -32,8 +32,18 @@ import {
   glasses,
 } from "ionicons/icons";
 import { useList } from "../components/Lists";
+import { useTMDBApi } from "../hooks/tmdbAPI";
+import {  SearchShowsByTitleOutputLanguageEnum, SearchShowsByFiltersGenresRelationEnum, GetShowSeriesGranularityEnum, ShowType } from "streaming-availability";
 
+/* const { getMoviesByTitle, getRandomMovie, getMoviesByFilter } = useTMDBApi();
+try {
+console.log(getRandomMovie("US", ShowType.Series, ["Action" , "Adventure"],SearchShowsByFiltersGenresRelationEnum.And, "",GetShowSeriesGranularityEnum.Show, 8));
 
+} catch (error) {
+  console.error(error);
+} */
+
+  
 /**
  * Hier kann man nach Filmen und Serien suchen.
  * 
@@ -190,5 +200,7 @@ const Home: React.FC = () => {
     </IonPage>
   );
 };
+
+
 
 export default Home;
