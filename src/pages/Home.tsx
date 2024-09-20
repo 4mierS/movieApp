@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useApi, { SearchResult, SearchType, SearchError } from "../hooks/useApi";
+import useApi, { SearchResult, SearchType, SearchError } from "../hooks/imdbAPI";
 import {
   IonContent,
   IonHeader,
