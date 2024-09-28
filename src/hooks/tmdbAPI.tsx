@@ -1,6 +1,6 @@
 import * as streamingAvailability from "streaming-availability";
 
-const RAPID_API_KEY = "afd7c1451fmsh9ae644bc4c677f1p13832ajsn6c391d8c88c9";
+const RAPID_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 const client = new streamingAvailability.Client(
   new streamingAvailability.Configuration({
     apiKey: RAPID_API_KEY,
@@ -62,6 +62,7 @@ export const useTMDBApi = () => {
     console.log(data);
   };
 
+  //TODO: No usage of this function - Use getMoviesByFilter instead
   const getRandomMovie = async (
     Country: string,
     ShowType?: streamingAvailability.ShowType,
@@ -83,9 +84,21 @@ export const useTMDBApi = () => {
     console.log(data);
     };
 
+    //TODO: Implement this function
+    // How to do: Search for an ID and look if its genre is the same like given genre
+    const getRandomMovieByID = async (
+    Country: string,
+    ) => {
+    const data = await client.showsApi.searchShowsByFilters({
+        country: Country,
+        });
+    console.log(data);
+    }
+
   return {
     getMoviesByTitle,
     getMoviesByFilter,
     getRandomMovie,
+    getRandomMovieByID,
   };
 };

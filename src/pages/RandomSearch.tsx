@@ -1,37 +1,105 @@
-import { IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React, { useState, useEffect } from 'react';
+import {
+  IonAlert,
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonContent,
+  IonHeader,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonSelect,
+  IonSelectOption,
+  IonSpinner,
+  IonTitle,
+  IonToolbar,
+} from "@ionic/react";
+import React, { useState, useEffect } from "react";
+import { Genre } from "../hooks/imdbAPI";
+
+export const genres = [
+  "action",
+  "adventure",
+  "animation",
+  "comedy",
+  "drama",
+  "horror",
+  "romance",
+  "sci-fi",
+  "thriller",
+  "western",
+  "fantasy",
+  "crime",
+  "documentary",
+  "family",
+  "history",
+  "mystery",
+  "music",
+  "war",
+  "news",
+  "reality",
+  "talk",
+];
 
 /**
  * Die Komponente RandomSearch zeigt einen zufälligen Film nach Genre an.
  *
- * @return {*} 
+ * @return {*}
  */
 const RandomSearch: React.FC = () => {
-    const [randomMovie, setRandomMovie] = useState<string>('');
+  const [randomMovie, setRandomMovie] = useState<{
+    title: string;
+    cast: string[];
+    description: string;
+  } | null>(null);
 
-    useEffect(() => {
-        const fetchRandomMovie = async () => {
-            try {
-                const response = await fetch('https://api.example.com/random-movie');
-                const data = await response.json();
-                setRandomMovie(data.title);
-            } catch (error) {
-                console.error('Error fetching random movie:', error);
-            }
-        };
+  const [type, setType] = useState<string>("action");
 
-        fetchRandomMovie();
-    }, []);
 
-    return (
-        <IonPage>
-            <IonHeader>
+  const alerted = (type: string) => () => {
+    console.log(type);
+  };
+
+  return (
+    <IonPage>
+      <IonHeader>
         <IonToolbar>
           <IonTitle>Random</IonTitle>
         </IonToolbar>
       </IonHeader>
-        </IonPage>
-    );
+      <IonContent>
+        {randomMovie ? (
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>{randomMovie?.title}</IonCardTitle>
+              <IonCardSubtitle>{randomMovie?.cast}</IonCardSubtitle>
+            </IonCardHeader>
+            <IonCardContent>{randomMovie?.description}</IonCardContent>
+          </IonCard>
+        ) : (
+          <IonSpinner />
+        )}
+        <IonItem>
+          <IonLabel>
+            Select Genre
+            <IonSelect value={type} onIonChange={(e: CustomEvent) => setType(e.detail.value!)}>
+              {genres.toSorted().map((genre) => (
+                <IonSelectOption key={genre} value={genre}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                </IonSelectOption>
+              ))}
+            </IonSelect>
+          </IonLabel>
+        </IonItem>
+        <IonButton shape="round" fill="outline" onClick={alerted(type)}>
+          Search
+        </IonButton>
+      </IonContent>
+    </IonPage>
+  );
 };
 
 export default RandomSearch;

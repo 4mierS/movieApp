@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import useApi, { SearchResult, SearchType, SearchError } from "../hooks/imdbAPI";
+import useApi, {
+  SearchResult,
+  SearchType,
+  SearchError,
+} from "../hooks/imdbAPI";
 import {
   IonContent,
   IonHeader,
@@ -33,31 +37,53 @@ import {
 } from "ionicons/icons";
 import { useList } from "../components/Lists";
 import { useTMDBApi } from "../hooks/tmdbAPI";
-import {  SearchShowsByTitleOutputLanguageEnum, SearchShowsByFiltersGenresRelationEnum, GetShowSeriesGranularityEnum, ShowType } from "streaming-availability";
+import {
+  SearchShowsByTitleOutputLanguageEnum,
+  SearchShowsByFiltersGenresRelationEnum,
+  GetShowSeriesGranularityEnum,
+  ShowType,
+  SearchShowsByFiltersOrderByEnum,
+} from "streaming-availability";
 
-/* const { getMoviesByTitle, getRandomMovie, getMoviesByFilter } = useTMDBApi();
+const { getMoviesByTitle, getRandomMovie, getMoviesByFilter } = useTMDBApi();
 try {
-console.log(getRandomMovie("US", ShowType.Series, ["Action" , "Adventure"],SearchShowsByFiltersGenresRelationEnum.And, "",GetShowSeriesGranularityEnum.Show, 8));
-
+  getMoviesByFilter(
+    "de",
+    undefined,
+    undefined,
+    undefined,
+    ["action, comedy"],
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    undefined,
+    SearchShowsByFiltersOrderByEnum.Rating,
+    "desc"
+  ).then((data) => {
+    console.log(data);
+  });
 } catch (error) {
   console.error(error);
-} */
+}
 
-  
 /**
  * Hier kann man nach Filmen und Serien suchen.
- * 
+ *
  * Die Komponente Home zeigt die Suchergebnisse an.
  *
- * @return {*} 
+ * @return {*}
  */
 const Home: React.FC = () => {
   const { searchData } = useApi();
-  const {favorites, watchlist, toggleItem, isInList } = useList();
+  const { toggleItem, isInList } = useList();
 
   /**
    * State für die Suchbegriffe und den Suchtyp.
-   * 
+   *
    * @param {string} searchTerm
    * @param {SearchType} type
    * @param {(SearchResult[] | SearchError | null)} results
@@ -71,7 +97,6 @@ const Home: React.FC = () => {
   const [presentAlert] = useIonAlert();
   const [loading, dismiss] = useIonLoading();
 
-  
   useEffect(() => {
     if (searchTerm === "") {
       setResults([]);
@@ -146,10 +171,7 @@ const Home: React.FC = () => {
           {results && Array.isArray(results)
             ? results.map((result: SearchResult, index: number) => (
                 <IonItemSliding key={index}>
-                  <IonItem
-                    button
-                    routerLink={`/movies/${result.imdbID}`}
-                  >
+                  <IonItem button routerLink={`/movies/${result.imdbID}`}>
                     <IonAvatar slot="start">
                       <IonImg src={result.Poster}></IonImg>
                     </IonAvatar>
@@ -168,23 +190,44 @@ const Home: React.FC = () => {
                     <IonIcon slot="end" icon={videocamOutline} />
                   </IonItem>
                   <IonItemOptions>
-                    <IonItemOption onClick={() => toggleItem({ ...result, EpisodeCounter: 0, SeasonCounter: 0 }, "favorites")}>
-                        <IonIcon
-                          slot="top"
-                          size="small"
-                          icon={
-                            isInList(result.imdbID, "favorites") ? heart : heartOutline
-                          }
-                        ></IonIcon>
-                        Favorite
+                    <IonItemOption
+                      onClick={() =>
+                        toggleItem(
+                          { ...result, EpisodeCounter: 0, SeasonCounter: 0 },
+                          "favorites"
+                        )
+                      }
+                    >
+                      <IonIcon
+                        slot="top"
+                        size="small"
+                        icon={
+                          isInList(result.imdbID, "favorites")
+                            ? heart
+                            : heartOutline
+                        }
+                      ></IonIcon>
+                      Favorite
                     </IonItemOption>
-                    <IonItemOption color="success" onClick={() => toggleItem({ ...result, EpisodeCounter: 0, SeasonCounter: 0 }, "watchlist")}>
-                        <IonIcon
-                          slot="top"
-                          size="small"
-                          icon={isInList(result.imdbID, "watchlist") ? glasses : glassesOutline}
-                        ></IonIcon>
-                        Watched
+                    <IonItemOption
+                      color="success"
+                      onClick={() =>
+                        toggleItem(
+                          { ...result, EpisodeCounter: 0, SeasonCounter: 0 },
+                          "watchlist"
+                        )
+                      }
+                    >
+                      <IonIcon
+                        slot="top"
+                        size="small"
+                        icon={
+                          isInList(result.imdbID, "watchlist")
+                            ? glasses
+                            : glassesOutline
+                        }
+                      ></IonIcon>
+                      Watched
                     </IonItemOption>
                   </IonItemOptions>
                 </IonItemSliding>
@@ -200,7 +243,5 @@ const Home: React.FC = () => {
     </IonPage>
   );
 };
-
-
 
 export default Home;
