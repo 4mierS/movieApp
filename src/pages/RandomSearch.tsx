@@ -58,13 +58,15 @@ const RandomSearch: React.FC = () => {
     title: string;
     cast: string[];
     overview: string;
+    nextCursor?: string | null;
   } | null>(null);
 
   const fetchData = async (
     country: string,
     genres: string[],
     orderBy: string = "rating",
-    orderDirection: string = "desc"
+    orderDirection: string = "desc",
+    nextCursor: string | null = null
   ) => {
     // Erstelle die Basis-URL
     const baseUrl =
@@ -144,19 +146,21 @@ const RandomSearch: React.FC = () => {
           <IonLabel>
             <IonItem>
               Select Genre
-              <IonSelect
-                value={type}
-                onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
-              >
-                {genres
-                  .filter((genre) => !selectedGenres.includes(genre))
-                  .toSorted()
-                  .map((genre) => (
-                    <IonSelectOption key={genre} value={genre}>
-                      {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                    </IonSelectOption>
-                  ))}
-              </IonSelect>
+              <IonItem>
+                <IonSelect
+                  value={type}
+                  onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
+                >
+                  {genres
+                    .filter((genre) => !selectedGenres.includes(genre))
+                    .toSorted()
+                    .map((genre) => (
+                      <IonSelectOption key={genre} value={genre}>
+                        {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                      </IonSelectOption>
+                    ))}
+                </IonSelect>
+              </IonItem>
             </IonItem>
           </IonLabel>
           <IonButton
@@ -197,9 +201,11 @@ const RandomSearch: React.FC = () => {
         ) : (
           <IonItem>
             <IonSpinner />
-            <IonText>
-              <p>Versuche es mit einer anderen Suche</p>
-            </IonText>
+            <IonItem>
+              <IonText>
+                <p>Versuche es mit einer anderen Suche</p>
+              </IonText>
+            </IonItem>
           </IonItem>
         )}
         <IonButton shape="round" fill="outline" onClick={showRandomMovie()}>
