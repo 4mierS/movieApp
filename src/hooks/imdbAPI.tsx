@@ -39,10 +39,6 @@ export interface SearchResponse {
     Response: "True";
 }
 
-//TODO: Need to be tested, if there are all genres or more in api
-
-export type Genre = "Action" | "Adventure" | "Animation" | "Biography" | "Comedy" | "Crime" | "Documentary" | "Drama" | "Family" | "Fantasy" | "Film-Noir" | "Game-Show" | "History" | "Horror" | "Music" | "Musical" | "Mystery" | "News" | "Reality-TV" | "Romance" | "Sci-Fi" | "Sport" | "Talk-Show" | "Thriller" | "War" | "Western";
-
 /**
  * Hook to use the OMDB API.
  * 
@@ -84,27 +80,9 @@ export const useApi = () => {
         return await response.json();
     };
 
-    //TODO: Handle Request
-    /**
-     * Search for a random movie or series of the given type.
-     *
-     * @param {Genre} type
-     * @return {*} 
-     */
-    const searchRandom = async (type: Genre) => {
-        const response = await fetch(`${url}?apikey=${apiKey}&s=star&type=movie`);
-        const result = await response.json();
-
-        if (type !== result.Search[0].Type) {
-            return searchRandom(type);
-        }
-        return result;
-    };
-
     return {
         searchData,
         getDetails,
-        searchRandom,
     };
 };
 

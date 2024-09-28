@@ -52,7 +52,7 @@ export const genres = [
  * @return {*}
  */
 const RandomSearch: React.FC = () => {
-  const [type, setType] = useState<string>("action");
+  const [type, setType] = useState<string | null>("action");
   const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
   const [randomMovie, setRandomMovie] = useState<{
     title: string;
