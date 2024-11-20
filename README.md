@@ -41,3 +41,31 @@ Build with:  `ionic cap build ios`
 
 <a href="https://youtu.be/xn-qpnT2n3Q" target="_blank"><img src="http://img.youtube.com/vi/xn-qpnT2n3Q/0.jpg"
 alt="Ionic Tutorial" width="240" height="180" /></a>
+
+
+## Here some images of the app
+
+![Search](https://github.com/4mierS/movieApp/blob/7e6b25351a1213f12ffa9f416a5525e1fc781d2b/public/images/Screenshot%202024-09-28%20203358.png)
+
+Search a film or series by name </br>
+You get a list of 10 films or series.
+___
+
+![Favorite](https://github.com/4mierS/movieApp/blob/random_film_search_%238/public/images/Screenshot%202024-09-28%20203617.png)
+
+Add your favorite films and series </br>
+You can remove them by clicking on the heart.
+
+___
+
+![Watchlist](https://github.com/4mierS/movieApp/blob/random_film_search_%238/public/images/Screenshot%202024-09-28%20203638.png)
+
+Add a list of watched films or currently watching films <br/>
+You forgot where u stopped, no problem. You can count the season and the episode here.
+
+___
+
+![Random](https://github.com/4mierS/movieApp/blob/random_film_search_%238/public/images/Screenshot%202024-09-28%20203706.png)
+
+Sitting in front of the screen and no idea what u want to watch? <br/>
+Use the random search functionality. Add up to three genres and have a nice time.
