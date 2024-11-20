@@ -4,6 +4,7 @@ A small app with the use of the API: omdbapi <br/>
 Here is the link: [OMDb](http://www.omdbapi.com/)
 
 ## How to run
+You need node for that project
 
 1. Clone the code
 2. Install dependancies with: `npm install` or  `yarn install`
@@ -15,7 +16,11 @@ Klick on the link: [API Key](http://www.omdbapi.com/apikey.aspx) <br/>
   Now change it in /hooks/useApi.tsx in line 39
 
 
-3. To run on browser:  `ionic serve`
+3. To run on browser:
+- `ionic serve`
+- or `npm run dev`
+
+
 
 
 ## You want to use it on Android Studio and XCode
