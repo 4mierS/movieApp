@@ -10,11 +10,15 @@ import {
   IonIcon,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonPage,
   IonSelect,
   IonSelectOption,
+  IonSkeletonText,
   IonSpinner,
   IonText,
+  IonThumbnail,
   IonTitle,
   IonToolbar,
 } from "@ionic/react"
@@ -56,14 +60,15 @@ const RandomSearch: React.FC = () => {
     }[]
   >([])
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState<boolean>(false)
 
-  const MAX_LENGTH = 100 // Maximale Textlänge für die Vorschau
+  const MAX_LENGTH = 100
 
   const truncateText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= MAX_LENGTH) {
-      return text // Zeige vollständigen Text
+      return text
     }
-    return `${text.substring(0, MAX_LENGTH)}...` // Text abschneiden
+    return `${text.substring(0, MAX_LENGTH)}...`
   }
 
   /**
@@ -121,6 +126,7 @@ const RandomSearch: React.FC = () => {
    * @returns void
    * */
   const showRandomMovie = async () => {
+    setLoaded(false)
     try {
       const data = await fetchData("DE", selectedGenres)
       if (data && data.shows && Array.isArray(data.shows)) {
@@ -129,6 +135,7 @@ const RandomSearch: React.FC = () => {
     } catch (error) {
       console.error("Error fetching data:", error)
     }
+    setLoaded(true)
   }
 
   /**
@@ -218,7 +225,29 @@ const RandomSearch: React.FC = () => {
           Search
         </IonButton>
 
-        {randomMovie.length > 0 ? (
+        {!loaded ? (
+          <IonList>
+            <IonListHeader>
+              <IonSkeletonText animated={true} style={{ width: "80px" }} />
+            </IonListHeader>
+            <IonItem>
+              <IonThumbnail slot="start">
+                <IonSkeletonText animated={true} />
+              </IonThumbnail>
+              <IonLabel>
+                <h3>
+                  <IonSkeletonText animated={true} style={{ width: "80%" }} />
+                </h3>
+                <p>
+                  <IonSkeletonText animated={true} style={{ width: "60%" }} />
+                </p>
+                <p>
+                  <IonSkeletonText animated={true} style={{ width: "30%" }} />
+                </p>
+              </IonLabel>
+            </IonItem>
+          </IonList>
+        ) : randomMovie.length > 0 ? (
           randomMovie.map((movie, index) => {
             const isExpanded = expandedCard === movie.title
             return (
@@ -239,8 +268,7 @@ const RandomSearch: React.FC = () => {
           })
         ) : (
           <IonItem>
-            <IonSpinner />
-            <IonText>Try another search</IonText>
+            <IonText>No results found. Try another search.</IonText>
           </IonItem>
         )}
       </IonContent>
