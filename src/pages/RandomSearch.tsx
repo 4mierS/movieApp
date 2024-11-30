@@ -66,6 +66,14 @@ const RandomSearch: React.FC = () => {
     return `${text.substring(0, MAX_LENGTH)}...` // Text abschneiden
   }
 
+  /**
+   * Ruft die Daten für die zufällige Suche ab
+   * @param country Land, für das die Suche durchgeführt werden soll
+   * @param genres Genres, die für die Suche verwendet werden sollen
+   * @param orderBy Sortierkriterium
+   * @param orderDirection Sortierreihenfolge
+   * @returns void
+   * */
   const fetchData = async (
     country: string,
     genres: string[],
@@ -108,6 +116,10 @@ const RandomSearch: React.FC = () => {
     return null
   }
 
+  /**
+   * Sucht einen zufälligen Film basierend auf den ausgewählten Genres
+   * @returns void
+   * */
   const showRandomMovie = async () => {
     try {
       const data = await fetchData("DE", selectedGenres)
@@ -119,17 +131,33 @@ const RandomSearch: React.FC = () => {
     }
   }
 
+  /**
+   * Fügt ein Genre zur Liste der ausgewählten Genres hinzu
+   * @param genre Genre, das hinzugefügt werden soll
+   * @returns void
+   * */
   const addGenre = (genre: string) => {
     if (genre && selectedGenres.length < 3) {
       setSelectedGenres([...selectedGenres, genre])
     }
   }
 
+  /**
+   * Behandelt die Auswahl eines Genres
+   * @param e CustomEvent
+   * @returns void
+   * */
   const handleGenreChange = (e: CustomEvent) => {
     const selectedGenre = e.detail.value
     setType(selectedGenre)
     addGenre(selectedGenre)
   }
+
+  /**
+   * Entfernt ein Genre aus der Liste der ausgewählten Genres
+   * @param genre Genre, das entfernt werden soll
+   * @returns void
+   * */
 
   const removeGenre = (genre: string) => {
     setSelectedGenres(selectedGenres.filter((g) => g !== genre))
