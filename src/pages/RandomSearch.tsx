@@ -1,5 +1,4 @@
 import {
-  IonAlert,
   IonButton,
   IonCard,
   IonCardContent,
@@ -18,9 +17,9 @@ import {
   IonText,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import React, { useState, useEffect } from "react";
-import { addOutline } from "ionicons/icons";
+} from "@ionic/react"
+import React, { useState } from "react"
+import { addOutline, removeOutline } from "ionicons/icons"
 
 export const genres = [
   "action",
@@ -44,43 +43,47 @@ export const genres = [
   "news",
   "reality",
   "talk",
-];
+]
 
-/**
- * Die Komponente RandomSearch zeigt einen zufälligen Film oder Serie nach Genre an.
- *
- * @return {*}
- */
 const RandomSearch: React.FC = () => {
-  const [type, setType] = useState<string | null>("action");
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
-  const [randomMovie, setRandomMovie] = useState<{
-    title: string;
-    cast: string[];
-    overview: string;
-    nextCursor?: string | null;
-  } | null>(null);
+  const [type, setType] = useState<string | null>("action")
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
+  const [randomMovie, setRandomMovie] = useState<
+    {
+      title: string
+      cast: string[]
+      overview: string
+    }[]
+  >([])
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+
+  const MAX_LENGTH = 100 // Maximale Textlänge für die Vorschau
+
+  const truncateText = (text: string, isExpanded: boolean) => {
+    if (isExpanded || text.length <= MAX_LENGTH) {
+      return text // Zeige vollständigen Text
+    }
+    return `${text.substring(0, MAX_LENGTH)}...` // Text abschneiden
+  }
 
   const fetchData = async (
     country: string,
     genres: string[],
     orderBy: string = "rating",
-    orderDirection: string = "desc",
-    nextCursor: string | null = null
+    orderDirection: string = "desc"
   ) => {
-    // Erstelle die Basis-URL
     const baseUrl =
-      "https://streaming-availability.p.rapidapi.com/shows/search/filters";
+      "https://streaming-availability.p.rapidapi.com/shows/search/filters"
 
     const params = new URLSearchParams({
-      country: country,
+      country,
       genres: genres.join(","),
       order_by: orderBy,
       order_direction: orderDirection,
       rating_min: "60",
-    });
+    })
 
-    const url = `${baseUrl}?${params.toString()}`;
+    const url = `${baseUrl}?${params.toString()}`
 
     const options = {
       method: "GET",
@@ -89,50 +92,48 @@ const RandomSearch: React.FC = () => {
         "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
         "Content-Type": "application/json",
       },
-    };
+    }
 
     try {
-      const response = await fetch(url, options);
+      const response = await fetch(url, options)
       if (response.ok) {
-        const data = await response.json();
-        console.log(data);
-        return data;
+        const data = await response.json()
+        return data
       } else {
-        console.error(`Error: ${response.status} ${response.statusText}`);
+        console.error(`Error: ${response.status} ${response.statusText}`)
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error("An error occurred:", error)
     }
-    return null;
-  };
+    return null
+  }
 
-  const showRandomMovie = () => async () => {
+  const showRandomMovie = async () => {
     try {
-      const data = await fetchData("DE", selectedGenres);
+      const data = await fetchData("DE", selectedGenres)
       if (data && data.shows && Array.isArray(data.shows)) {
-        const randomIndex = Math.floor(Math.random() * data.shows.length);
-        const randomShow = data.shows[randomIndex];
-        setRandomMovie({
-          title: randomShow.title,
-          cast: randomShow.cast,
-          overview: randomShow.overview,
-        });
+        setRandomMovie(data.shows)
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error)
     }
-  };
+  }
 
-  const addGenre = () => {
-    if (type && selectedGenres.length < 3) {
-      setSelectedGenres([...selectedGenres, type]);
-      setType(null);
+  const addGenre = (genre: string) => {
+    if (genre && selectedGenres.length < 3) {
+      setSelectedGenres([...selectedGenres, genre])
     }
-  };
+  }
+
+  const handleGenreChange = (e: CustomEvent) => {
+    const selectedGenre = e.detail.value
+    setType(selectedGenre)
+    addGenre(selectedGenre)
+  }
 
   const removeGenre = (genre: string) => {
-    setSelectedGenres(selectedGenres.filter((g) => g !== genre));
-  };
+    setSelectedGenres(selectedGenres.filter((g) => g !== genre))
+  }
 
   return (
     <IonPage>
@@ -143,39 +144,25 @@ const RandomSearch: React.FC = () => {
       </IonHeader>
       <IonContent>
         <IonItem>
-          <IonLabel>
-            <IonItem>
-              Select Genre
-              <IonItem>
-                <IonSelect
-                  value={type}
-                  onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
-                >
-                  {genres
-                    .filter((genre) => !selectedGenres.includes(genre))
-                    .toSorted()
-                    .map((genre) => (
-                      <IonSelectOption key={genre} value={genre}>
-                        {genre.charAt(0).toUpperCase() + genre.slice(1)}
-                      </IonSelectOption>
-                    ))}
-                </IonSelect>
-              </IonItem>
-            </IonItem>
-          </IonLabel>
-          <IonButton
-            shape="round"
-            fill="outline"
-            onClick={addGenre}
-            disabled={!type || selectedGenres.length >= 3} // Button deaktivieren, wenn keine Genres mehr ausgewählt werden können
-            slot="end"
+          <IonSelect
+            value={type}
+            onIonChange={handleGenreChange}
+            placeholder="Select Genre"
+            disabled={selectedGenres.length >= 3}
+            interface="action-sheet"
           >
-            <IonIcon slot="icon-only" icon={addOutline} />
-          </IonButton>
+            {genres
+              .filter((genre) => !selectedGenres.includes(genre))
+              .sort()
+              .map((genre) => (
+                <IonSelectOption key={genre} value={genre}>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                </IonSelectOption>
+              ))}
+          </IonSelect>
         </IonItem>
         {selectedGenres.length > 0 && (
           <IonItem>
-            <IonLabel>Selected Genres:</IonLabel>
             {selectedGenres.map((genre) => (
               <IonButton
                 key={genre}
@@ -183,37 +170,54 @@ const RandomSearch: React.FC = () => {
                 fill="outline"
                 onClick={() => removeGenre(genre)}
               >
-                {genre}
+                <IonLabel>
+                  {genre.charAt(0).toUpperCase() + genre.slice(1)}
+                </IonLabel>
+                <IonLabel>
+                  <IonIcon color="danger" icon={removeOutline} />
+                </IonLabel>
               </IonButton>
             ))}
           </IonItem>
         )}
-        {randomMovie ? (
-          <IonCard>
-            <IonCardHeader>
-              <IonCardTitle>{randomMovie?.title}</IonCardTitle>
-            </IonCardHeader>
-            <IonCardContent>
-              <IonCardSubtitle>{randomMovie?.cast}</IonCardSubtitle>
-              {randomMovie?.overview}
-            </IonCardContent>
-          </IonCard>
+        <IonButton
+          className="ion-padding"
+          expand="block"
+          shape="round"
+          fill="outline"
+          onClick={showRandomMovie}
+        >
+          Search
+        </IonButton>
+
+        {randomMovie.length > 0 ? (
+          randomMovie.map((movie, index) => {
+            const isExpanded = expandedCard === movie.title
+            return (
+              <IonCard
+                key={`${movie.title}-${index}`}
+                onClick={() => setExpandedCard(isExpanded ? null : movie.title)}
+              >
+                <IonCardHeader>
+                  <IonCardTitle>{movie.title}</IonCardTitle>
+                </IonCardHeader>
+                <IonCardContent>
+                  <IonCardSubtitle>{movie.cast.join(", ")}</IonCardSubtitle>
+                  <p>{truncateText(movie.overview, isExpanded)}</p>
+                  {!isExpanded && <IonText color="primary">Read more</IonText>}
+                </IonCardContent>
+              </IonCard>
+            )
+          })
         ) : (
           <IonItem>
             <IonSpinner />
-            <IonItem>
-              <IonText>
-                <p>Versuche es mit einer anderen Suche</p>
-              </IonText>
-            </IonItem>
+            <IonText>Try another search</IonText>
           </IonItem>
         )}
-        <IonButton shape="round" fill="outline" onClick={showRandomMovie()}>
-          Search
-        </IonButton>
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default RandomSearch;
+export default RandomSearch
