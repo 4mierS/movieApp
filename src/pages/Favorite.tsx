@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react"
 import {
   IonAvatar,
   IonButton,
@@ -12,58 +12,17 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import { chevronUpCircleOutline, heart, sadOutline } from "ionicons/icons";
-import { useList } from "../components/Lists";
+} from "@ionic/react"
+import { heart, sadOutline } from "ionicons/icons"
+import { useList } from "../components/Lists"
 
 /**
  * Die Komponente Favorite zeigt die favorisierten Filme an.
  *
- * @return {*} 
+ * @return {*}
  */
 const Favorite: React.FC = () => {
-  const { favorites, toggleItem, isInList } = useList();
-
-  const contentRef = useRef<IonContent>(null);
-  const [isContentScrollable, setIsContentScrollable] = useState(false);
-
-  /**
-   * Scrollt zum Anfang der Liste.
-   * 
-   * @returns {void}
-   */
-  const scrollToTop = () => {
-    contentRef.current?.scrollToTop(500); 
-  };
-
-  /**
-   * Überprüft, ob die Liste scrollbar ist.
-   * 
-   * @returns {void}
-   */
-  const checkScrollable = () => {
-    if (contentRef.current) {
-      contentRef.current.getScrollElement().then((el: HTMLElement) => {
-        const scrollHeight = el.scrollHeight;
-        const offsetHeight = el.offsetHeight;
-        setIsContentScrollable(scrollHeight - 1 > offsetHeight);
-      });
-    }
-  };
-
-  
-  useEffect(() => {
-  
-    const timer = setTimeout(() => {
-      checkScrollable();
-    }, 200);
-
-    return () => clearTimeout(timer); 
-  }, []);
-
-  useEffect(() => {
-    checkScrollable(); 
-  }, [favorites]);
+  const { favorites, toggleItem } = useList()
 
   return (
     <IonPage>
@@ -72,7 +31,7 @@ const Favorite: React.FC = () => {
           <IonTitle>Favorites</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent ref={contentRef}>
+      <IonContent>
         <IonList>
           {favorites.length > 0 ? (
             favorites.map((fav) => (
@@ -104,16 +63,9 @@ const Favorite: React.FC = () => {
             </div>
           )}
         </IonList>
-        {isContentScrollable == true ? (
-          <IonItem>
-            <IonButton onClick={scrollToTop} slot="end" color={"secondary"}>
-              <IonIcon icon={chevronUpCircleOutline} slot="icon-only" />
-            </IonButton>
-          </IonItem>
-        ) : null}
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default Favorite;
+export default Favorite
