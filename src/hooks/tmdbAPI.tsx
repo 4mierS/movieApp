@@ -70,30 +70,28 @@ export const useTMDBApi = () => {
     GenreRelations?: streamingAvailability.SearchShowsByFiltersGenresRelationEnum,
     Keyword?: string,
     SeriesGranularity?: streamingAvailability.GetShowSeriesGranularityEnum,
-    RatingMin?: number,
+    RatingMin?: number
   ) => {
     const data = await client.showsApi.searchShowsByFilters({
-        country: Country,
-        showType: ShowType,
-        genres: Genre,
-        genresRelation: GenreRelations,
-        ratingMin: RatingMin,
-        keyword: Keyword,
-        seriesGranularity: SeriesGranularity,
-        });
+      country: Country,
+      showType: ShowType,
+      genres: Genre,
+      genresRelation: GenreRelations,
+      ratingMin: RatingMin,
+      keyword: Keyword,
+      seriesGranularity: SeriesGranularity,
+    });
     console.log(data);
-    };
+  };
 
-    //TODO: Implement this function
-    // How to do: Search for an ID and look if its genre is the same like given genre
-    const getRandomMovieByID = async (
-    Country: string,
-    ) => {
+  //TODO: Implement this function
+  // How to do: Search for an ID and look if its genre is the same like given genre
+  const getRandomMovieByID = async (Country: string) => {
     const data = await client.showsApi.searchShowsByFilters({
-        country: Country,
-        });
+      country: Country,
+    });
     console.log(data);
-    }
+  };
 
   return {
     getMoviesByTitle,
