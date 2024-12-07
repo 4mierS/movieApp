@@ -20,6 +20,7 @@ import {
 } from "@ionic/react"
 import { heart, heartOutline, sadOutline } from "ionicons/icons"
 import { useList } from "../components/Lists"
+import { isPlatform } from "@ionic/react"
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -43,7 +44,15 @@ const Watchlist: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Watchlist</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Watchlist</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Watchlist</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>

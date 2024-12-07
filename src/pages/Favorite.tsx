@@ -3,6 +3,7 @@ import {
   IonAvatar,
   IonButton,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonImg,
@@ -10,11 +11,14 @@ import {
   IonLabel,
   IonList,
   IonPage,
+  IonRow,
   IonTitle,
   IonToolbar,
 } from "@ionic/react"
 import { heart, sadOutline } from "ionicons/icons"
 import { useList } from "../components/Lists"
+import { isPlatform } from "@ionic/react"
+import "./Home.css"
 
 /**
  * Die Komponente Favorite zeigt die favorisierten Filme an.
@@ -28,7 +32,15 @@ const Favorite: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Favorites</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Favorite</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Favorite</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -51,16 +63,20 @@ const Favorite: React.FC = () => {
               </IonItem>
             ))
           ) : (
-            <div className="centered-div">
-              <IonIcon
-                icon={sadOutline}
-                color="danger"
-                style={{ fontSize: "60px" }}
-              />
-              <IonLabel>
-                <h2>No favorites added yet</h2>
-              </IonLabel>
-            </div>
+            <IonGrid className="ion-align-items-end" fixed={true}>
+              <IonRow className="ion-justify-content-center ion-padding">
+                <IonIcon
+                  icon={sadOutline}
+                  color="danger"
+                  style={{ fontSize: "60px" }}
+                />
+              </IonRow>
+              <IonRow className="ion-justify-content-center ion-padding">
+                <IonLabel>
+                  <h2>No favorites added yet</h2>
+                </IonLabel>
+              </IonRow>
+            </IonGrid>
           )}
         </IonList>
       </IonContent>

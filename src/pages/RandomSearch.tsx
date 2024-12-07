@@ -5,7 +5,9 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
@@ -13,6 +15,7 @@ import {
   IonList,
   IonListHeader,
   IonPage,
+  IonRow,
   IonSelect,
   IonSelectOption,
   IonSkeletonText,
@@ -21,9 +24,10 @@ import {
   IonThumbnail,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import React, { useState } from "react";
-import { addOutline, removeOutline } from "ionicons/icons";
+  isPlatform,
+} from "@ionic/react"
+import React, { useState } from "react"
+import { addOutline, removeOutline } from "ionicons/icons"
 
 export const genres = [
   "action",
@@ -47,29 +51,30 @@ export const genres = [
   "news",
   "reality",
   "talk",
-];
+]
 
 const RandomSearch: React.FC = () => {
-  const [type, setType] = useState<string | null>("action");
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+  const [type, setType] = useState<string | null>("action")
+  const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [randomMovie, setRandomMovie] = useState<
     {
-      title: string;
-      cast: string[];
-      overview: string;
+      title: string
+      cast: string[]
+      overview: string
+      rating: number
     }[]
-  >([]);
-  const [expandedCard, setExpandedCard] = useState<string | null>(null);
-  const [loaded, setLoaded] = useState<boolean>(false);
+  >([])
+  const [expandedCard, setExpandedCard] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState<boolean>(false)
 
-  const MAX_LENGTH = 100;
+  const MAX_LENGTH = 100
 
   const truncateText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= MAX_LENGTH) {
-      return text;
+      return text
     }
-    return `${text.substring(0, MAX_LENGTH)}...`;
-  };
+    return `${text.substring(0, MAX_LENGTH)}...`
+  }
 
   /**
    * Ruft die Daten für die zufällige Suche ab
@@ -86,7 +91,7 @@ const RandomSearch: React.FC = () => {
     orderDirection: string = "desc"
   ) => {
     const baseUrl =
-      "https://streaming-availability.p.rapidapi.com/shows/search/filters";
+      "https://streaming-availability.p.rapidapi.com/shows/search/filters"
 
     const params = new URLSearchParams({
       country,
@@ -94,9 +99,9 @@ const RandomSearch: React.FC = () => {
       order_by: orderBy,
       order_direction: orderDirection,
       rating_min: "60",
-    });
+    })
 
-    const url = `${baseUrl}?${params.toString()}`;
+    const url = `${baseUrl}?${params.toString()}`
 
     const options = {
       method: "GET",
@@ -105,38 +110,38 @@ const RandomSearch: React.FC = () => {
         "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
         "Content-Type": "application/json",
       },
-    };
+    }
 
     try {
-      const response = await fetch(url, options);
+      const response = await fetch(url, options)
       if (response.ok) {
-        const data = await response.json();
-        return data;
+        const data = await response.json()
+        return data
       } else {
-        console.error(`Error: ${response.status} ${response.statusText}`);
+        console.error(`Error: ${response.status} ${response.statusText}`)
       }
     } catch (error) {
-      console.error("An error occurred:", error);
+      console.error("An error occurred:", error)
     }
-    return null;
-  };
+    return null
+  }
 
   /**
    * Sucht einen zufälligen Film basierend auf den ausgewählten Genres
    * @returns void
    * */
   const showRandomMovie = async () => {
-    setLoaded(false);
+    setLoaded(false)
     try {
-      const data = await fetchData("DE", selectedGenres);
+      const data = await fetchData("DE", selectedGenres)
       if (data && data.shows && Array.isArray(data.shows)) {
-        setRandomMovie(data.shows);
+        setRandomMovie(data.shows)
       }
     } catch (error) {
-      console.error("Error fetching data:", error);
+      console.error("Error fetching data:", error)
     }
-    setLoaded(true);
-  };
+    setLoaded(true)
+  }
 
   /**
    * Fügt ein Genre zur Liste der ausgewählten Genres hinzu
@@ -145,9 +150,9 @@ const RandomSearch: React.FC = () => {
    * */
   const addGenre = (genre: string) => {
     if (genre && selectedGenres.length < 3) {
-      setSelectedGenres([...selectedGenres, genre]);
+      setSelectedGenres([...selectedGenres, genre])
     }
-  };
+  }
 
   /**
    * Behandelt die Auswahl eines Genres
@@ -155,10 +160,10 @@ const RandomSearch: React.FC = () => {
    * @returns void
    * */
   const handleGenreChange = (e: CustomEvent) => {
-    const selectedGenre = e.detail.value;
-    setType(selectedGenre);
-    addGenre(selectedGenre);
-  };
+    const selectedGenre = e.detail.value
+    setType(selectedGenre)
+    addGenre(selectedGenre)
+  }
 
   /**
    * Entfernt ein Genre aus der Liste der ausgewählten Genres
@@ -167,14 +172,36 @@ const RandomSearch: React.FC = () => {
    * */
 
   const removeGenre = (genre: string) => {
-    setSelectedGenres(selectedGenres.filter((g) => g !== genre));
-  };
+    setSelectedGenres(selectedGenres.filter((g) => g !== genre))
+  }
+
+  const ratingColor = (rating: number) => {
+    if (rating >= 80) {
+      return "success"
+    } else if (rating >= 60) {
+      return "warning"
+    } else {
+      return "danger"
+    }
+  }
+
+  const ratingTo10 = (rating: number) => {
+    return (rating / 10).toFixed(1)
+  }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Random</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Random</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Random</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -248,22 +275,33 @@ const RandomSearch: React.FC = () => {
           </IonList>
         ) : randomMovie.length > 0 ? (
           randomMovie.map((movie, index) => {
-            const isExpanded = expandedCard === movie.title;
+            const isExpanded = expandedCard === movie.title
             return (
               <IonCard
                 key={`${movie.title}-${index}`}
                 onClick={() => setExpandedCard(isExpanded ? null : movie.title)}
               >
-                <IonCardHeader>
-                  <IonCardTitle>{movie.title}</IonCardTitle>
-                </IonCardHeader>
+                <IonGrid>
+                  <IonCardHeader>
+                    <IonRow className="ion-align-items-start ion-justify-content-between">
+                      <IonCol size="8">
+                        <IonCardTitle>{movie.title}</IonCardTitle>
+                      </IonCol>
+                      <IonCol>
+                        <IonText color={ratingColor(movie.rating)}>
+                          {ratingTo10(movie.rating)}
+                        </IonText>
+                      </IonCol>
+                    </IonRow>
+                  </IonCardHeader>
+                </IonGrid>
                 <IonCardContent>
                   <IonCardSubtitle>{movie.cast.join(", ")}</IonCardSubtitle>
                   <p>{truncateText(movie.overview, isExpanded)}</p>
                   {!isExpanded && <IonText color="primary">Read more</IonText>}
                 </IonCardContent>
               </IonCard>
-            );
+            )
           })
         ) : (
           <IonItem>
@@ -272,7 +310,7 @@ const RandomSearch: React.FC = () => {
         )}
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default RandomSearch;
+export default RandomSearch
