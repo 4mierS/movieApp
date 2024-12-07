@@ -5,18 +5,26 @@ import {
   IonCardHeader,
   IonCardSubtitle,
   IonCardTitle,
+  IonCol,
   IonContent,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonItem,
   IonLabel,
+  IonList,
+  IonListHeader,
   IonPage,
+  IonRow,
   IonSelect,
   IonSelectOption,
+  IonSkeletonText,
   IonSpinner,
   IonText,
+  IonThumbnail,
   IonTitle,
   IonToolbar,
+  isPlatform,
 } from "@ionic/react"
 import React, { useState } from "react"
 import { addOutline, removeOutline } from "ionicons/icons"
@@ -53,19 +61,29 @@ const RandomSearch: React.FC = () => {
       title: string
       cast: string[]
       overview: string
+      rating: number
     }[]
   >([])
   const [expandedCard, setExpandedCard] = useState<string | null>(null)
+  const [loaded, setLoaded] = useState<boolean>(false)
 
-  const MAX_LENGTH = 100 // Maximale Textlänge für die Vorschau
+  const MAX_LENGTH = 100
 
   const truncateText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= MAX_LENGTH) {
-      return text // Zeige vollständigen Text
+      return text
     }
-    return `${text.substring(0, MAX_LENGTH)}...` // Text abschneiden
+    return `${text.substring(0, MAX_LENGTH)}...`
   }
 
+  /**
+   * Ruft die Daten für die zufällige Suche ab
+   * @param country Land, für das die Suche durchgeführt werden soll
+   * @param genres Genres, die für die Suche verwendet werden sollen
+   * @param orderBy Sortierkriterium
+   * @param orderDirection Sortierreihenfolge
+   * @returns void
+   * */
   const fetchData = async (
     country: string,
     genres: string[],
@@ -108,7 +126,12 @@ const RandomSearch: React.FC = () => {
     return null
   }
 
+  /**
+   * Sucht einen zufälligen Film basierend auf den ausgewählten Genres
+   * @returns void
+   * */
   const showRandomMovie = async () => {
+    setLoaded(false)
     try {
       const data = await fetchData("DE", selectedGenres)
       if (data && data.shows && Array.isArray(data.shows)) {
@@ -117,29 +140,68 @@ const RandomSearch: React.FC = () => {
     } catch (error) {
       console.error("Error fetching data:", error)
     }
+    setLoaded(true)
   }
 
+  /**
+   * Fügt ein Genre zur Liste der ausgewählten Genres hinzu
+   * @param genre Genre, das hinzugefügt werden soll
+   * @returns void
+   * */
   const addGenre = (genre: string) => {
     if (genre && selectedGenres.length < 3) {
       setSelectedGenres([...selectedGenres, genre])
     }
   }
 
+  /**
+   * Behandelt die Auswahl eines Genres
+   * @param e CustomEvent
+   * @returns void
+   * */
   const handleGenreChange = (e: CustomEvent) => {
     const selectedGenre = e.detail.value
     setType(selectedGenre)
     addGenre(selectedGenre)
   }
 
+  /**
+   * Entfernt ein Genre aus der Liste der ausgewählten Genres
+   * @param genre Genre, das entfernt werden soll
+   * @returns void
+   * */
+
   const removeGenre = (genre: string) => {
     setSelectedGenres(selectedGenres.filter((g) => g !== genre))
+  }
+
+  const ratingColor = (rating: number) => {
+    if (rating >= 80) {
+      return "success"
+    } else if (rating >= 60) {
+      return "warning"
+    } else {
+      return "danger"
+    }
+  }
+
+  const ratingTo10 = (rating: number) => {
+    return (rating / 10).toFixed(1)
   }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Random</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Random</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Random</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -149,7 +211,6 @@ const RandomSearch: React.FC = () => {
             onIonChange={handleGenreChange}
             placeholder="Select Genre"
             disabled={selectedGenres.length >= 3}
-            interface="action-sheet"
           >
             {genres
               .filter((genre) => !selectedGenres.includes(genre))
@@ -190,7 +251,29 @@ const RandomSearch: React.FC = () => {
           Search
         </IonButton>
 
-        {randomMovie.length > 0 ? (
+        {!loaded ? (
+          <IonList>
+            <IonListHeader>
+              <IonSkeletonText animated={true} style={{ width: "80px" }} />
+            </IonListHeader>
+            <IonItem>
+              <IonThumbnail slot="start">
+                <IonSkeletonText animated={true} />
+              </IonThumbnail>
+              <IonLabel>
+                <h3>
+                  <IonSkeletonText animated={true} style={{ width: "80%" }} />
+                </h3>
+                <p>
+                  <IonSkeletonText animated={true} style={{ width: "60%" }} />
+                </p>
+                <p>
+                  <IonSkeletonText animated={true} style={{ width: "30%" }} />
+                </p>
+              </IonLabel>
+            </IonItem>
+          </IonList>
+        ) : randomMovie.length > 0 ? (
           randomMovie.map((movie, index) => {
             const isExpanded = expandedCard === movie.title
             return (
@@ -198,9 +281,20 @@ const RandomSearch: React.FC = () => {
                 key={`${movie.title}-${index}`}
                 onClick={() => setExpandedCard(isExpanded ? null : movie.title)}
               >
-                <IonCardHeader>
-                  <IonCardTitle>{movie.title}</IonCardTitle>
-                </IonCardHeader>
+                <IonGrid>
+                  <IonCardHeader>
+                    <IonRow className="ion-align-items-start ion-justify-content-between">
+                      <IonCol size="8">
+                        <IonCardTitle>{movie.title}</IonCardTitle>
+                      </IonCol>
+                      <IonCol>
+                        <IonText color={ratingColor(movie.rating)}>
+                          {ratingTo10(movie.rating)}
+                        </IonText>
+                      </IonCol>
+                    </IonRow>
+                  </IonCardHeader>
+                </IonGrid>
                 <IonCardContent>
                   <IonCardSubtitle>{movie.cast.join(", ")}</IonCardSubtitle>
                   <p>{truncateText(movie.overview, isExpanded)}</p>
@@ -211,8 +305,7 @@ const RandomSearch: React.FC = () => {
           })
         ) : (
           <IonItem>
-            <IonSpinner />
-            <IonText>Try another search</IonText>
+            <IonText>No results found. Try another search.</IonText>
           </IonItem>
         )}
       </IonContent>

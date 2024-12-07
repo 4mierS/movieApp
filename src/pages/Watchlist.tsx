@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React from "react"
 import {
-  IonAlert,
   IonAvatar,
   IonCol,
   IonContent,
@@ -18,9 +17,10 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
-} from "@ionic/react";
-import { heart, heartOutline, sadOutline } from "ionicons/icons";
-import { useList } from "../components/Lists";
+} from "@ionic/react"
+import { heart, heartOutline, sadOutline } from "ionicons/icons"
+import { useList } from "../components/Lists"
+import { isPlatform } from "@ionic/react"
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -28,46 +28,7 @@ import { useList } from "../components/Lists";
  * @return {*}
  */
 const Watchlist: React.FC = () => {
-  const { watchlist, handleCounterClick, isInList } = useList();
-
-  const contentRef = useRef<IonContent>(null);
-  const [isContentScrollable, setIsContentScrollable] = useState(false);
-
-  /**
-   * Scrollt zum Anfang der Liste.
-   *
-   * @returns {void}
-   */
-  const scrollToTop = () => {
-    contentRef.current?.scrollToTop(500);
-  };
-
-  /**
-   * Überprüft, ob die Liste scrollbar ist.
-   *
-   * @returns {void}
-   */
-  const checkScrollable = () => {
-    if (contentRef.current) {
-      contentRef.current.getScrollElement().then((el: HTMLElement) => {
-        const scrollHeight = el.scrollHeight;
-        const offsetHeight = el.offsetHeight;
-        setIsContentScrollable(scrollHeight - 1 > offsetHeight);
-      });
-    }
-  };
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      checkScrollable();
-    }, 200);
-
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    checkScrollable();
-  }, [watchlist]);
+  const { watchlist, handleCounterClick, isInList } = useList()
 
   //FIXME: Github Issue #7
   //TODO: Implement the incrementSeasonCounter and incrementEpisodeCounter functions
@@ -76,14 +37,22 @@ const Watchlist: React.FC = () => {
    *
    */
   const handleIonSwipe = () => {
-    console.log("Swiped");
-  };
+    console.log("Swiped")
+  }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Watchlist</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Watchlist</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Watchlist</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -95,13 +64,13 @@ const Watchlist: React.FC = () => {
                   <IonItemOptions
                     side="start"
                     onIonSwipe={() => {
-                      handleCounterClick(list, "SeasonCounter", "decrement");
+                      handleCounterClick(list, "SeasonCounter", "decrement")
                     }}
                   >
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        handleCounterClick(list, "SeasonCounter", "increment");
+                        handleCounterClick(list, "SeasonCounter", "increment")
                       }}
                     >
                       <IonIcon
@@ -147,13 +116,13 @@ const Watchlist: React.FC = () => {
                   </IonItem>
                   <IonItemOptions
                     onIonSwipe={() => {
-                      handleCounterClick(list, "EpisodeCounter", "decrement");
+                      handleCounterClick(list, "EpisodeCounter", "decrement")
                     }}
                   >
                     <IonItemOption
                       expandable
                       onClick={() => {
-                        handleCounterClick(list, "EpisodeCounter", "increment");
+                        handleCounterClick(list, "EpisodeCounter", "increment")
                       }}
                     >
                       <IonIcon
@@ -179,7 +148,7 @@ const Watchlist: React.FC = () => {
         </IonList>
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default Watchlist;
+export default Watchlist
