@@ -1,9 +1,5 @@
-import { useEffect, useState } from "react";
-import useApi, {
-  SearchResult,
-  SearchType,
-  SearchError,
-} from "../hooks/imdbAPI";
+import { useEffect, useState } from "react"
+import useApi, { SearchResult, SearchType, SearchError } from "../hooks/imdbAPI"
 import {
   IonContent,
   IonHeader,
@@ -25,7 +21,10 @@ import {
   IonItemOptions,
   IonItemSliding,
   IonButton,
-} from "@ionic/react";
+  isPlatform,
+  IonGrid,
+  IonRow,
+} from "@ionic/react"
 import {
   videocamOutline,
   tvOutline,
@@ -34,18 +33,18 @@ import {
   heart,
   heartOutline,
   glasses,
-} from "ionicons/icons";
-import { useList } from "../components/Lists";
-import { useTMDBApi } from "../hooks/tmdbAPI";
+} from "ionicons/icons"
+import { useList } from "../components/Lists"
+import { useTMDBApi } from "../hooks/tmdbAPI"
 import {
   SearchShowsByTitleOutputLanguageEnum,
   SearchShowsByFiltersGenresRelationEnum,
   GetShowSeriesGranularityEnum,
   ShowType,
   SearchShowsByFiltersOrderByEnum,
-} from "streaming-availability";
+} from "streaming-availability"
 
-const { getMoviesByTitle, getRandomMovie, getMoviesByFilter } = useTMDBApi();
+const { getMoviesByFilter } = useTMDBApi()
 try {
   getMoviesByFilter(
     "de",
@@ -64,10 +63,10 @@ try {
     SearchShowsByFiltersOrderByEnum.Rating,
     "desc"
   ).then((data) => {
-    console.log(data);
-  });
+    console.log(data)
+  })
 } catch (error) {
-  console.error(error);
+  console.error(error)
 }
 
 /**
@@ -78,8 +77,8 @@ try {
  * @return {*}
  */
 const Home: React.FC = () => {
-  const { searchData } = useApi();
-  const { toggleItem, isInList } = useList();
+  const { searchData } = useApi()
+  const { toggleItem, isInList } = useList()
 
   /**
    * State für die Suchbegriffe und den Suchtyp.
@@ -88,61 +87,63 @@ const Home: React.FC = () => {
    * @param {SearchType} type
    * @param {(SearchResult[] | SearchError | null)} results
    */
-  const [searchTerm, setSearchTerm] = useState("");
-  const [type, setType] = useState<SearchType>(SearchType.all);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [type, setType] = useState<SearchType>(SearchType.all)
   const [results, setResults] = useState<SearchResult[] | SearchError | null>(
     null
-  );
+  )
 
-  const [presentAlert] = useIonAlert();
-  const [loading, dismiss] = useIonLoading();
+  const [presentAlert] = useIonAlert()
+  const [loading, dismiss] = useIonLoading()
 
   useEffect(() => {
     if (searchTerm === "") {
-      setResults([]);
-      return;
+      setResults([])
+      return
     }
     const loadData = async () => {
-      await loading();
+      await loading()
 
       try {
-        const result = await searchData(searchTerm, type);
+        const result = await searchData(searchTerm, type)
 
-        await dismiss();
+        await dismiss()
         if (result.Response === "False") {
           presentAlert({
             header: "Error",
             message: result.Error,
             buttons: ["OK"],
-          });
+          })
         } else {
-          setResults(result.Search);
+          setResults(result.Search)
         }
       } catch (error) {
-        console.error("Error fetching data: ", error);
+        console.error("Error fetching data: ", error)
         setResults({
           Error: "An unexpected error occurred",
           Response: "False",
-        });
+        })
       }
-    };
-    loadData();
-  }, [searchTerm, type]);
+    }
+    loadData()
+  }, [searchTerm, type])
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Search your Movie</IonTitle>
+          {isPlatform("desktop") ? (
+            <IonGrid>
+              <IonRow className="ion-justify-content-center">
+                <h1 id="desktop-header-1">Home</h1>
+              </IonRow>
+            </IonGrid>
+          ) : (
+            <IonTitle>Home</IonTitle>
+          )}
         </IonToolbar>
       </IonHeader>
-      <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Hello World</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-
+      <IonContent>
         <IonSearchbar
           onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
           debounce={300}
@@ -241,7 +242,7 @@ const Home: React.FC = () => {
         </IonList>
       </IonContent>
     </IonPage>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home
