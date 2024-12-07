@@ -44,7 +44,7 @@ import {
   SearchShowsByFiltersOrderByEnum,
 } from "streaming-availability"
 
-const { getMoviesByTitle, getRandomMovie, getMoviesByFilter } = useTMDBApi()
+const { getMoviesByFilter } = useTMDBApi()
 try {
   getMoviesByFilter(
     "de",
