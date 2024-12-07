@@ -28,6 +28,7 @@ import {
 } from "@ionic/react"
 import React, { useState } from "react"
 import { addOutline, removeOutline } from "ionicons/icons"
+import SkeletonItem from "../components/SkeletonItem"
 
 export const genres = [
   "action",
@@ -189,6 +190,10 @@ const RandomSearch: React.FC = () => {
     return (rating / 10).toFixed(1)
   }
 
+  const randomNumber = (min: number, max: number) => {
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -253,25 +258,21 @@ const RandomSearch: React.FC = () => {
 
         {!loaded ? (
           <IonList>
-            <IonListHeader>
-              <IonSkeletonText animated={true} style={{ width: "80px" }} />
-            </IonListHeader>
-            <IonItem>
-              <IonThumbnail slot="start">
-                <IonSkeletonText animated={true} />
-              </IonThumbnail>
-              <IonLabel>
-                <h3>
-                  <IonSkeletonText animated={true} style={{ width: "80%" }} />
-                </h3>
-                <p>
-                  <IonSkeletonText animated={true} style={{ width: "60%" }} />
-                </p>
-                <p>
-                  <IonSkeletonText animated={true} style={{ width: "30%" }} />
-                </p>
-              </IonLabel>
-            </IonItem>
+            {[...Array(5)].map((_, index) => (
+              <React.Fragment key={index}>
+                <IonListHeader>
+                  <IonSkeletonText
+                    animated={true}
+                    style={{ width: `${randomNumber(40, 80)}px` }}
+                  />
+                </IonListHeader>
+                <SkeletonItem
+                  width1={`${randomNumber(0, 100)}%`}
+                  width2={`${randomNumber(0, 100)}%`}
+                  width3={`${randomNumber(0, 100)}%`}
+                />
+              </React.Fragment>
+            ))}
           </IonList>
         ) : randomMovie.length > 0 ? (
           randomMovie.map((movie, index) => {
