@@ -22,7 +22,6 @@ export const useTMDBApi = () => {
       showType: ShowType,
       seriesGranularity: SeriesGranularity,
     })
-    console.log(data)
   }
 
   const getMoviesByFilter = async (
@@ -80,7 +79,6 @@ export const useTMDBApi = () => {
       keyword: Keyword,
       seriesGranularity: SeriesGranularity,
     })
-    console.log(data)
   }
 
   //TODO: Implement this function
@@ -89,7 +87,6 @@ export const useTMDBApi = () => {
     const data = await client.showsApi.searchShowsByFilters({
       country: Country,
     })
-    console.log(data)
   }
 
   return {
