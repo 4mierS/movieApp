@@ -17,8 +17,10 @@ import {
   IonRow,
   IonTitle,
   IonToolbar,
+  IonDatetime,
+  IonDatetimeButton,
 } from "@ionic/react"
-import { heart, heartOutline, glasses, sadOutline } from "ionicons/icons"
+import { glasses, sadOutline, pencil } from "ionicons/icons"
 import { useList, ListItem } from "../components/Lists"
 import { isPlatform } from "@ionic/react"
 
@@ -32,13 +34,15 @@ const Watchlist: React.FC = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [selectedItem, setSelectedItem] = useState<ListItem | null>(null)
-  const [seasonCounter, setSeasonCounter] = useState<number>(0)
-  const [episodeCounter, setEpisodeCounter] = useState<number>(0)
+  const [seasonCounter, setSeasonCounter] = useState<number>(1)
+  const [episodeCounter, setEpisodeCounter] = useState<number>(1)
+  const [stoppedOn, setStoppedOn] = useState<string>("")
 
   const openModal = (item: ListItem) => {
     setSelectedItem(item)
-    setSeasonCounter(item.SeasonCounter || 0)
-    setEpisodeCounter(item.EpisodeCounter || 0)
+    setSeasonCounter(item.SeasonCounter || 1)
+    setEpisodeCounter(item.EpisodeCounter || 1)
+    setStoppedOn(item.stoppedOn || "")
     setIsModalOpen(true)
   }
 
@@ -57,6 +61,11 @@ const Watchlist: React.FC = () => {
         "increment",
         episodeCounter
       )
+
+      //update stoppedOn
+      if (stoppedOn) {
+        selectedItem.stoppedOn = stoppedOn
+      }
 
       localStorage.setItem(
         "watchlist",
@@ -83,66 +92,71 @@ const Watchlist: React.FC = () => {
           {isPlatform("desktop") ? (
             <IonGrid>
               <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">Home</h1>
+                <h1 id="desktop-header-1">Watchlist</h1>
               </IonRow>
             </IonGrid>
           ) : (
-            <IonTitle>Home</IonTitle>
+            <IonTitle>Watchlist</IonTitle>
           )}
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonList lines="inset">
+        <IonList lines="none" className="watchlist-list">
           {watchlist.length > 0 ? (
-            watchlist
-              .map((list, index) => (
-                <IonItem key={index}>
-                  <IonAvatar slot="start">
-                    <IonImg src={list.Poster}></IonImg>
-                  </IonAvatar>
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <IonLabel className="ion-text-wrap">
-                          {list.Title}
-                        </IonLabel>
-                      </IonCol>
-                      <IonCol size="auto">
-                        <IonButton
-                          shape="round"
-                          onClick={() => toggleItem(list, "watchlist")}
-                        >
-                          <IonIcon slot="icon-only" icon={glasses}></IonIcon>
-                        </IonButton>
-                      </IonCol>
-                    </IonRow>
-                    <IonRow>
-                      <IonCol size="auto">
-                        <IonLabel>
-                          {list.SeasonCounter !== undefined
-                            ? `Seasons: ${list.SeasonCounter}`
-                            : ""}
-                        </IonLabel>
-                      </IonCol>
-                      <IonCol>
-                        <IonLabel>
-                          {list.EpisodeCounter !== undefined
-                            ? `Episodes: ${list.EpisodeCounter}`
-                            : ""}
-                        </IonLabel>
-                      </IonCol>
-                      <IonCol size="auto">
-                        <IonButton onClick={() => openModal(list)}>
-                          Edit
-                        </IonButton>
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonItem>
-              ))
-              .toReversed()
+            watchlist.map((list, index) => (
+              <IonItem
+                key={index}
+                className="watchlist-item"
+                button
+                routerLink={`/movies/${list.imdbID}`}
+              >
+                <IonAvatar slot="start">
+                  <IonImg src={list.Poster} />
+                </IonAvatar>
+                <IonGrid>
+                  {/* Titel */}
+                  <IonRow className="ion-align-items-center">
+                    <IonCol size="8">
+                      <IonLabel className="title-label">{list.Title}</IonLabel>
+                    </IonCol>
+                  </IonRow>
+
+                  {/* Details */}
+                  <IonRow className="details-row ion-align-items-center">
+                    <IonCol>
+                      <IonLabel>Seasons: {list.SeasonCounter || 0}</IonLabel>
+                    </IonCol>
+                    <IonCol>
+                      <IonLabel>Episodes: {list.EpisodeCounter || 0}</IonLabel>
+                    </IonCol>
+                    <IonCol>
+                      <IonLabel>
+                        {list.stoppedOn && list.stoppedOn != "00:00"
+                          ? `Stopped on: ${list.stoppedOn}`
+                          : ""}
+                      </IonLabel>
+                    </IonCol>
+                  </IonRow>
+                  <IonRow>
+                    <IonCol size="auto">
+                      <IonButton onClick={() => openModal(list)} size="small">
+                        <IonIcon slot="icon-only" icon={pencil}></IonIcon>
+                      </IonButton>
+                    </IonCol>
+                    <IonCol size="4" className="ion-text-right">
+                      <IonButton
+                        shape="round"
+                        onClick={() => toggleItem(list, "watchlist")}
+                      >
+                        <IonIcon slot="icon-only" icon={glasses}></IonIcon>
+                      </IonButton>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
+              </IonItem>
+            ))
           ) : (
-            <IonGrid className="ion-align-items-end" fixed={true}>
+            <IonGrid className="ion-align-items-center" fixed>
               <IonRow className="ion-justify-content-center ion-padding">
                 <IonIcon
                   icon={sadOutline}
@@ -170,9 +184,9 @@ const Watchlist: React.FC = () => {
             <IonItem>
               <IonLabel>Seasons Watched</IonLabel>
               <IonInput
+                slot="end"
                 type="number"
                 value={seasonCounter}
-                //TODO: better to commit with enter or without?
                 onIonInput={(e) =>
                   setSeasonCounter(
                     Math.max(0, parseInt(e.detail.value || "0", 10))
@@ -184,15 +198,48 @@ const Watchlist: React.FC = () => {
             <IonItem>
               <IonLabel>Episodes Watched</IonLabel>
               <IonInput
+                slot="end"
                 type="number"
                 value={episodeCounter}
-                //TODO: better to commit with enter or without?
                 onIonInput={(e) =>
                   setEpisodeCounter(
                     Math.max(0, parseInt(e.detail.value || "0", 10))
                   )
                 }
               />
+            </IonItem>
+
+            <IonItem>
+              <IonLabel>Stopped on:</IonLabel>
+              <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
+              <IonModal keepContentsMounted={true}>
+                <IonDatetime
+                  value={stoppedOn || "00:00"} // Standardwert nur, wenn `stoppedOn` leer ist
+                  presentation="time"
+                  id="datetime"
+                  hourCycle="h23"
+                  onIonChange={(e) => {
+                    const newValue = e.detail.value
+                    if (typeof newValue === "string") {
+                      setStoppedOn(newValue)
+                    }
+
+                    if (selectedItem) {
+                      const updatedWatchlist = watchlist.map((item) =>
+                        item.imdbID === selectedItem.imdbID
+                          ? { ...item, stoppedOn: newValue || "00:00" }
+                          : item
+                      )
+
+                      localStorage.setItem(
+                        "watchlist",
+                        JSON.stringify(updatedWatchlist)
+                      )
+                      console.log("Updated watchlist:", updatedWatchlist)
+                    }
+                  }}
+                />
+              </IonModal>
             </IonItem>
 
             <div
