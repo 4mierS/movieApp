@@ -104,12 +104,7 @@ const Watchlist: React.FC = () => {
         <IonList lines="none" className="watchlist-list">
           {watchlist.length > 0 ? (
             watchlist.map((list, index) => (
-              <IonItem
-                key={index}
-                className="watchlist-item"
-                button
-                routerLink={`/movies/${list.imdbID}`}
-              >
+              <IonItem key={index} className="watchlist-item">
                 <IonAvatar slot="start">
                   <IonImg src={list.Poster} />
                 </IonAvatar>
@@ -150,6 +145,12 @@ const Watchlist: React.FC = () => {
                       >
                         <IonIcon slot="icon-only" icon={glasses}></IonIcon>
                       </IonButton>
+                    </IonCol>
+                    <IonCol size="auto">
+                      <IonItem
+                        button
+                        routerLink={`/movies/${list.imdbID}`}
+                      ></IonItem>
                     </IonCol>
                   </IonRow>
                 </IonGrid>
@@ -235,7 +236,6 @@ const Watchlist: React.FC = () => {
                         "watchlist",
                         JSON.stringify(updatedWatchlist)
                       )
-                      console.log("Updated watchlist:", updatedWatchlist)
                     }
                   }}
                 />

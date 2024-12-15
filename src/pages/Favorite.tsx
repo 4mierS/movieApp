@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from "react"
 import {
   IonAvatar,
   IonButton,
+  IonCol,
   IonContent,
   IonGrid,
   IonHeader,
@@ -44,26 +45,28 @@ const Favorite: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonList>
+        <IonList className="watchlist-list">
           {favorites.length > 0 ? (
             favorites.map((fav) => (
               <IonItem
+                className="watchlist-item"
+                key={fav.imdbID}
                 button
                 routerLink={`/movies/${fav.imdbID}`}
-                key={fav.imdbID}
               >
                 <IonAvatar slot="start">
                   <IonImg alt="MovieImage" src={fav.Poster} />
                 </IonAvatar>
-                <h3>{fav.Title}</h3>
-                <IonLabel slot="end">{fav.Year}</IonLabel>
-                <IonButton
-                  shape="round"
-                  slot="end"
-                  onClick={() => toggleItem(fav, "favorites")}
-                >
-                  <IonIcon slot="icon-only" icon={heart}></IonIcon>
-                </IonButton>
+                <IonGrid>
+                  <IonRow>
+                    <IonCol size="10">
+                      <h3>{fav.Title}</h3>
+                    </IonCol>
+                    <IonCol size="2">
+                      <IonLabel slot="end">{fav.Year}</IonLabel>
+                    </IonCol>
+                  </IonRow>
+                </IonGrid>
               </IonItem>
             ))
           ) : (
