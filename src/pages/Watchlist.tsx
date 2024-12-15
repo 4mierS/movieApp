@@ -101,7 +101,7 @@ const Watchlist: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonList lines="none">
+        <IonList lines="none" className="watchlist-list">
           {watchlist.length > 0 ? (
             watchlist.map((list, index) => (
               <IonItem
@@ -118,14 +118,6 @@ const Watchlist: React.FC = () => {
                   <IonRow className="ion-align-items-center">
                     <IonCol size="8">
                       <IonLabel className="title-label">{list.Title}</IonLabel>
-                    </IonCol>
-                    <IonCol size="4" className="ion-text-right">
-                      <IonButton
-                        shape="round"
-                        onClick={() => toggleItem(list, "watchlist")}
-                      >
-                        <IonIcon slot="icon-only" icon={glasses}></IonIcon>
-                      </IonButton>
                     </IonCol>
                   </IonRow>
 
@@ -144,9 +136,19 @@ const Watchlist: React.FC = () => {
                           : ""}
                       </IonLabel>
                     </IonCol>
+                  </IonRow>
+                  <IonRow>
                     <IonCol size="auto">
                       <IonButton onClick={() => openModal(list)} size="small">
                         <IonIcon slot="icon-only" icon={pencil}></IonIcon>
+                      </IonButton>
+                    </IonCol>
+                    <IonCol size="4" className="ion-text-right">
+                      <IonButton
+                        shape="round"
+                        onClick={() => toggleItem(list, "watchlist")}
+                      >
+                        <IonIcon slot="icon-only" icon={glasses}></IonIcon>
                       </IonButton>
                     </IonCol>
                   </IonRow>
