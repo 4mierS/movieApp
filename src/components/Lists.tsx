@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, createContext } from "react"
 
 export interface ListItem {
+  [x: string]: any
   imdbID: string
   Title: string
   Year: string
@@ -8,6 +9,7 @@ export interface ListItem {
   Type: string
   EpisodeCounter: number
   SeasonCounter: number
+  stoppedOn: string
 }
 
 export type ListType = "favorites" | "watchlist"

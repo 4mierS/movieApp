@@ -20,7 +20,6 @@ import {
   IonItemOption,
   IonItemOptions,
   IonItemSliding,
-  IonButton,
   isPlatform,
   IonGrid,
   IonRow,
@@ -35,39 +34,6 @@ import {
   glasses,
 } from "ionicons/icons"
 import { useList } from "../components/Lists"
-import { useTMDBApi } from "../hooks/tmdbAPI"
-import {
-  SearchShowsByTitleOutputLanguageEnum,
-  SearchShowsByFiltersGenresRelationEnum,
-  GetShowSeriesGranularityEnum,
-  ShowType,
-  SearchShowsByFiltersOrderByEnum,
-} from "streaming-availability"
-
-const { getMoviesByFilter } = useTMDBApi()
-try {
-  getMoviesByFilter(
-    "de",
-    undefined,
-    undefined,
-    undefined,
-    ["action, comedy"],
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    SearchShowsByFiltersOrderByEnum.Rating,
-    "desc"
-  ).then((data) => {
-    console.log(data)
-  })
-} catch (error) {
-  console.error(error)
-}
 
 /**
  * Hier kann man nach Filmen und Serien suchen.
@@ -194,7 +160,12 @@ const Home: React.FC = () => {
                     <IonItemOption
                       onClick={() =>
                         toggleItem(
-                          { ...result, EpisodeCounter: 0, SeasonCounter: 0 },
+                          {
+                            ...result,
+                            EpisodeCounter: 1,
+                            SeasonCounter: 1,
+                            stoppedOn: "",
+                          },
                           "favorites"
                         )
                       }
@@ -214,7 +185,12 @@ const Home: React.FC = () => {
                       color="success"
                       onClick={() =>
                         toggleItem(
-                          { ...result, EpisodeCounter: 0, SeasonCounter: 0 },
+                          {
+                            ...result,
+                            EpisodeCounter: 1,
+                            SeasonCounter: 1,
+                            stoppedOn: "",
+                          },
                           "watchlist"
                         )
                       }

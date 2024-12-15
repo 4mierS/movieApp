@@ -1,11 +1,11 @@
-import * as streamingAvailability from "streaming-availability";
+import * as streamingAvailability from "streaming-availability"
 
-const RAPID_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+const RAPID_API_KEY = import.meta.env.VITE_TMDB_API_KEY
 const client = new streamingAvailability.Client(
   new streamingAvailability.Configuration({
     apiKey: RAPID_API_KEY,
   })
-);
+)
 
 export const useTMDBApi = () => {
   const getMoviesByTitle = async (
@@ -21,9 +21,9 @@ export const useTMDBApi = () => {
       outputLanguage: Outputlanguage,
       showType: ShowType,
       seriesGranularity: SeriesGranularity,
-    });
-    console.log(data);
-  };
+    })
+    console.log(data)
+  }
 
   const getMoviesByFilter = async (
     Country: string,
@@ -42,7 +42,7 @@ export const useTMDBApi = () => {
     OrderBy?: streamingAvailability.SearchShowsByFiltersOrderByEnum,
     OrderDirection?: streamingAvailability.OrderDirection
   ) => {
-    const data = await client.showsApi.searchShowsByFilters({
+    const getRandomMovies = await client.showsApi.searchShowsByFilters({
       country: Country,
       catalogs: Catalogs,
       outputLanguage: Language,
@@ -58,9 +58,8 @@ export const useTMDBApi = () => {
       seriesGranularity: SeriesGranularity,
       orderBy: OrderBy,
       orderDirection: OrderDirection,
-    });
-    console.log(data);
-  };
+    })
+  }
 
   //TODO: No usage of this function - Use getMoviesByFilter instead
   const getRandomMovie = async (
@@ -80,23 +79,23 @@ export const useTMDBApi = () => {
       ratingMin: RatingMin,
       keyword: Keyword,
       seriesGranularity: SeriesGranularity,
-    });
-    console.log(data);
-  };
+    })
+    console.log(data)
+  }
 
   //TODO: Implement this function
   // How to do: Search for an ID and look if its genre is the same like given genre
   const getRandomMovieByID = async (Country: string) => {
     const data = await client.showsApi.searchShowsByFilters({
       country: Country,
-    });
-    console.log(data);
-  };
+    })
+    console.log(data)
+  }
 
   return {
     getMoviesByTitle,
     getMoviesByFilter,
     getRandomMovie,
     getRandomMovieByID,
-  };
-};
+  }
+}
