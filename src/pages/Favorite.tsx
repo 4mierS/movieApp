@@ -47,7 +47,11 @@ const Favorite: React.FC = () => {
         <IonList>
           {favorites.length > 0 ? (
             favorites.map((fav) => (
-              <IonItem key={fav.imdbID}>
+              <IonItem
+                button
+                routerLink={`/movies/${fav.imdbID}`}
+                key={fav.imdbID}
+              >
                 <IonAvatar slot="start">
                   <IonImg alt="MovieImage" src={fav.Poster} />
                 </IonAvatar>

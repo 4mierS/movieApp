@@ -104,7 +104,12 @@ const Watchlist: React.FC = () => {
         <IonList lines="none">
           {watchlist.length > 0 ? (
             watchlist.map((list, index) => (
-              <IonItem key={index} className="watchlist-item">
+              <IonItem
+                key={index}
+                className="watchlist-item"
+                button
+                routerLink={`/movies/${list.imdbID}`}
+              >
                 <IonAvatar slot="start">
                   <IonImg src={list.Poster} />
                 </IonAvatar>
