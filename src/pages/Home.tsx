@@ -23,6 +23,7 @@ import {
   isPlatform,
   IonGrid,
   IonRow,
+  IonButton,
 } from "@ionic/react"
 import {
   videocamOutline,
@@ -34,6 +35,7 @@ import {
   glasses,
 } from "ionicons/icons"
 import { useList } from "../components/Lists"
+import { useTranslation } from "react-i18next"
 
 /**
  * Hier kann man nach Filmen und Serien suchen.
@@ -45,6 +47,7 @@ import { useList } from "../components/Lists"
 const Home: React.FC = () => {
   const { searchData } = useApi()
   const { toggleItem, isInList } = useList()
+  const { t, i18n } = useTranslation()
 
   /**
    * State für die Suchbegriffe und den Suchtyp.
@@ -110,6 +113,8 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
+        <IonButton onClick={() => i18n.changeLanguage("en")}>English</IonButton>
+        <IonButton onClick={() => i18n.changeLanguage("de")}>Deutsch</IonButton>
         <IonSearchbar
           onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
           debounce={300}
