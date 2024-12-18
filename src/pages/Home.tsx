@@ -104,11 +104,11 @@ const Home: React.FC = () => {
           {isPlatform("desktop") ? (
             <IonGrid>
               <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">Home</h1>
+                <h1 id="desktop-header-1">{t("home")}</h1>
               </IonRow>
             </IonGrid>
           ) : (
-            <IonTitle>Home</IonTitle>
+            <IonTitle>{t("home")}</IonTitle>
           )}
         </IonToolbar>
       </IonHeader>
