@@ -82,7 +82,7 @@ const Favorite: React.FC = () => {
               </IonRow>
               <IonRow className="ion-justify-content-center ion-padding">
                 <IonLabel>
-                  <h2>No favorites added yet</h2>
+                  <h2>{t("no_favorites")}</h2>
                 </IonLabel>
               </IonRow>
             </IonGrid>

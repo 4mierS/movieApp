@@ -48,46 +48,52 @@ import "@ionic/react/css/palettes/dark.system.css"
 /* Theme variables */
 import "./theme/variables.css"
 import Details from "./pages/Details"
+import { useTranslation } from "react-i18next"
 
 setupIonicReact()
+const App: React.FC = () => {
+  const { t, i18n } = useTranslation()
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <ListProvider>
-        <IonTabs>
-          <IonRouterOutlet>
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/movies/:id" component={Details} />
-            <Route exact path="/favorite" component={Favorite} />
-            <Route exact path="/watchlist" component={Watchlist} />
-            <Route exact path="/random" component={RandomSearch} />
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-          </IonRouterOutlet>
-          <IonTabBar slot="bottom">
-            <IonTabButton tab="home" href="/home">
-              <IonIcon icon={home} />
-              <IonLabel>Search</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="Favorite" href="/favorite">
-              <IonIcon icon={library} />
-              <IonLabel>Favorite</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="watchlist" href="/watchlist">
-              <IonIcon icon={eye} />
-              <IonLabel>Watchlist</IonLabel>
-            </IonTabButton>
-            <IonTabButton tab="random" href="/random">
-              <IonIcon icon={shuffle} />
-              <IonLabel>Random</IonLabel>
-            </IonTabButton>
-          </IonTabBar>
-        </IonTabs>
-      </ListProvider>
-    </IonReactRouter>
-  </IonApp>
-)
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <ListProvider>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/home" component={Home} />
+              <Route exact path="/movies/:id" component={Details} />
+              <Route exact path="/favorite" component={Favorite} />
+              <Route exact path="/watchlist" component={Watchlist} />
+              <Route exact path="/random" component={RandomSearch} />
+              <Route exact path="/">
+                <Redirect to="/home" />
+              </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={home} />
+                <IonLabel>{t("home")}</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="Favorite" href="/favorite">
+                <IonIcon icon={library} />
+                <IonLabel>{t("favorites")}</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="watchlist" href="/watchlist">
+                <IonIcon icon={eye} />
+                <IonLabel>{t("watchlist")}</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="random" href="/random">
+                <IonIcon icon={shuffle} />
+                <IonLabel>{t("random")}</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </ListProvider>
+      </IonReactRouter>
+    </IonApp>
+  )
+}
+
+
 
 export default App

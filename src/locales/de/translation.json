@@ -18,12 +18,25 @@
   "de": "Deutsch",
   "en": "Englisch",
   "cancel": "Abbrechen",
+  "save": "Speichern",
   "type": "Suchtyp",
 
-  "favorites": "Favoriten",
+  "loading": "Laden",
 
+  "favorites": "Favoriten",
+  "no_favorites": "Noch keine Favoriten",
+
+  "no_watchlist": "Beobachtungsliste ist leer",
+  "edit_watchlist": "Bearbeiten des gesehenen Fortschritts",
+  "season_watched": "Staffel gesehen",
+  "episode_watched": "Episode gesehen",
   "watchlist": "Beobachtungsliste",
   "seasons": "Staffeln",
   "episodes": "Episoden",
-  "stopped_on": "Gestoppt um"
+  "stopped_on": "Gestoppt um",
+
+  "random": "Zufällig",
+  "select_genre": "Genre auswählen",
+
+  "action": "Action"
 }

@@ -18,12 +18,25 @@
   "de": "German",
   "en": "English",
   "cancel": "Cancel",
+  "save": "Save",
   "type": "Search Type",
 
-  "favorites": "Favorites",
+  "loading": "Loading",
 
+  "favorites": "Favorites",
+  "no_favorites": "No favorites yet",
+
+  "no_watchlist": "watchlist is empty",
+  "edit_watchlist": "Edit watched progress",
+  "season_watched": "Season watched",
+  "episode_watched": "Episode watched",
   "watchlist": "Watchlist",
   "seasons": "Seasons",
-  "episodes": "Episoden",
-  "stopped_on": "Gestoppt um"
+  "episodes": "Episodes",
+  "stopped_on": "Stopped at",
+
+  "random": "Random",
+  "select_genre": "Select Genre",
+
+  "action": "Action"
 }

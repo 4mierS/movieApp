@@ -23,6 +23,7 @@ import {
 import { glasses, sadOutline, pencil } from "ionicons/icons"
 import { useList, ListItem } from "../components/Lists"
 import { isPlatform } from "@ionic/react"
+import { useTranslation } from "react-i18next"
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -37,6 +38,7 @@ const Watchlist: React.FC = () => {
   const [seasonCounter, setSeasonCounter] = useState<number>(1)
   const [episodeCounter, setEpisodeCounter] = useState<number>(1)
   const [stoppedOn, setStoppedOn] = useState<string>("")
+  const { t, i18n } = useTranslation()
 
   const openModal = (item: ListItem) => {
     setSelectedItem(item)
@@ -73,10 +75,10 @@ const Watchlist: React.FC = () => {
           watchlist.map((item) =>
             item.imdbID === selectedItem.imdbID
               ? {
-                  ...item,
-                  SeasonCounter: seasonCounter,
-                  EpisodeCounter: episodeCounter,
-                }
+                ...item,
+                SeasonCounter: seasonCounter,
+                EpisodeCounter: episodeCounter,
+              }
               : item
           )
         )
@@ -92,11 +94,11 @@ const Watchlist: React.FC = () => {
           {isPlatform("desktop") ? (
             <IonGrid>
               <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">Watchlist</h1>
+                <h1 id="desktop-header-1">{t("watchlist")}</h1>
               </IonRow>
             </IonGrid>
           ) : (
-            <IonTitle>Watchlist</IonTitle>
+            <IonTitle>{t("watchlist")}</IonTitle>
           )}
         </IonToolbar>
       </IonHeader>
@@ -119,10 +121,10 @@ const Watchlist: React.FC = () => {
                   {/* Details */}
                   <IonRow className="details-row ion-align-items-center">
                     <IonCol>
-                      <IonLabel>Seasons: {list.SeasonCounter || 0}</IonLabel>
+                      <IonLabel>{t("seasons")} {list.SeasonCounter || 0}</IonLabel>
                     </IonCol>
                     <IonCol>
-                      <IonLabel>Episodes: {list.EpisodeCounter || 0}</IonLabel>
+                      <IonLabel>{t("episodes")} {list.EpisodeCounter || 0}</IonLabel>
                     </IonCol>
                     <IonCol>
                       <IonLabel>
@@ -167,7 +169,7 @@ const Watchlist: React.FC = () => {
               </IonRow>
               <IonRow className="ion-justify-content-center ion-padding">
                 <IonLabel>
-                  <h2>No favorites added yet</h2>
+                  <h2>{t("no_watchlist")}</h2>
                 </IonLabel>
               </IonRow>
             </IonGrid>
@@ -180,10 +182,10 @@ const Watchlist: React.FC = () => {
           onDidDismiss={() => setIsModalOpen(false)}
         >
           <div style={{ padding: "16px" }}>
-            <h2 style={{ textAlign: "center" }}>Edit Watched Progress</h2>
+            <h2 style={{ textAlign: "center" }}>{t("edit_watchlist")}</h2>
 
             <IonItem>
-              <IonLabel>Seasons Watched</IonLabel>
+              <IonLabel>{t("season_watched")}</IonLabel>
               <IonInput
                 slot="end"
                 type="number"
@@ -197,7 +199,7 @@ const Watchlist: React.FC = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel>Episodes Watched</IonLabel>
+              <IonLabel>{t("episode_watched")}</IonLabel>
               <IonInput
                 slot="end"
                 type="number"
@@ -211,7 +213,7 @@ const Watchlist: React.FC = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel>Stopped on:</IonLabel>
+              <IonLabel>{t("stopped_on")}</IonLabel>
               <IonDatetimeButton datetime="datetime"></IonDatetimeButton>
               <IonModal keepContentsMounted={true}>
                 <IonDatetime
@@ -254,10 +256,10 @@ const Watchlist: React.FC = () => {
                 onClick={() => setIsModalOpen(false)}
                 color="medium"
               >
-                Cancel
+                {t("cancel")}
               </IonButton>
               <IonButton expand="block" onClick={saveChanges} color="primary">
-                Save
+                {t("save")}
               </IonButton>
             </div>
           </div>

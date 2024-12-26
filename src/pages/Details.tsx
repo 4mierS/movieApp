@@ -33,6 +33,7 @@ import {
   heartOutline,
 } from "ionicons/icons";
 import { useList } from "../components/Lists";
+import { useTranslation } from "react-i18next"
 
 interface RouteParams {
   id: string;
@@ -43,6 +44,7 @@ const Details: React.FC = () => {
   const { getDetails } = useApi();
   const [movie, setMovie] = useState<DetailsResult | null>(null);
   const { favorites, toggleItem, isInList } = useList();
+  const { t, i18n } = useTranslation()
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -67,32 +69,66 @@ const Details: React.FC = () => {
       <IonContent fullscreen>
         {movie ? (
           <IonItem>
-              <IonCard>
-                <IonCardHeader >
-                  <IonItem>
-                    <IonCardTitle  color="secondary">{movie.Title}</IonCardTitle>
-                    <IonButton
-                      shape="round"
+            <IonCard>
+              <IonCardHeader >
+                <IonItem>
+                  <IonCardTitle color="secondary">{movie.Title}</IonCardTitle>
+                  <IonButton
+                    shape="round"
+                    size="small"
+                    slot="end"
+                    onClick={() => toggleItem(movie, "favorites")}
+                  >
+                    <IonIcon
+                      slot="icon-only"
                       size="small"
-                      slot="end"
-                      onClick={() => toggleItem(movie, "favorites")}
-                    >
-                      <IonIcon
-                        slot="icon-only"
-                        size="small"
-                        icon={isInList(movie.imdbID, "favorites") ? heart : heartOutline}
-                      ></IonIcon>
-                    </IonButton>
-                  </IonItem>
-                  <IonItem>
+                      icon={isInList(movie.imdbID, "favorites") ? heart : heartOutline}
+                    ></IonIcon>
+                  </IonButton>
+                </IonItem>
+                <IonItem>
                   <IonCardSubtitle>{movie.Year}</IonCardSubtitle>
-                  </IonItem>
-                </IonCardHeader>
-                <IonCardContent>
-                  <IonImg src={movie.Poster}/>
-                  <IonItem>
-                    {Array.from({ length: 5 }, (_, index) => {
-                      if (movie.imdbRating === "N/A") {
+                </IonItem>
+              </IonCardHeader>
+              <IonCardContent>
+                <IonImg src={movie.Poster} />
+                <IonItem>
+                  {Array.from({ length: 5 }, (_, index) => {
+                    if (movie.imdbRating === "N/A") {
+                      return (
+                        <IonIcon
+                          key={index}
+                          icon={starOutline}
+                          slot="start"
+                          color="medium"
+                        />
+                      );
+                    } else {
+                      const fullStars = Math.floor(
+                        Number(movie.imdbRating) / 2
+                      );
+                      const halfStar =
+                        Number(movie.imdbRating) % 2 >= 1 ? true : false;
+
+                      if (index < fullStars) {
+                        return (
+                          <IonIcon
+                            key={index}
+                            icon={star}
+                            slot="start"
+                            color="warning"
+                          />
+                        );
+                      } else if (index === fullStars && halfStar) {
+                        return (
+                          <IonIcon
+                            key={index}
+                            icon={starHalfOutline}
+                            slot="start"
+                            color="warning"
+                          />
+                        );
+                      } else {
                         return (
                           <IonIcon
                             key={index}
@@ -101,71 +137,37 @@ const Details: React.FC = () => {
                             color="medium"
                           />
                         );
-                      } else {
-                        const fullStars = Math.floor(
-                          Number(movie.imdbRating) / 2
-                        );
-                        const halfStar =
-                          Number(movie.imdbRating) % 2 >= 1 ? true : false;
-
-                        if (index < fullStars) {
-                          return (
-                            <IonIcon
-                              key={index}
-                              icon={star}
-                              slot="start"
-                              color="warning"
-                            />
-                          );
-                        } else if (index === fullStars && halfStar) {
-                          return (
-                            <IonIcon
-                              key={index}
-                              icon={starHalfOutline}
-                              slot="start"
-                              color="warning"
-                            />
-                          );
-                        } else {
-                          return (
-                            <IonIcon
-                              key={index}
-                              icon={starOutline}
-                              slot="start"
-                              color="medium"
-                            />
-                          );
-                        }
                       }
-                    })}
-                    <IonLabel>{movie.imdbRating}</IonLabel>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>
-                      <IonText color="primary">Genre:</IonText> {movie.Genre}
-                    </IonLabel>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>
-                      <IonText color="primary">Director:</IonText>{" "}
-                      {movie.Director}
-                    </IonLabel>
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel>
-                      <IonText color="primary">Actors:</IonText> {movie.Actors}
-                    </IonLabel>
-                  </IonItem>
-                  <IonItem lines="none">
-                    <IonLabel>
-                      <IonText color="primary">Plot:</IonText> {movie.Plot}
-                    </IonLabel>
-                  </IonItem>
-                </IonCardContent>
-              </IonCard>
+                    }
+                  })}
+                  <IonLabel>{movie.imdbRating}</IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>
+                    <IonText color="primary">Genre:</IonText> {movie.Genre}
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>
+                    <IonText color="primary">Director:</IonText>{" "}
+                    {movie.Director}
+                  </IonLabel>
+                </IonItem>
+                <IonItem>
+                  <IonLabel>
+                    <IonText color="primary">Actors:</IonText> {movie.Actors}
+                  </IonLabel>
+                </IonItem>
+                <IonItem lines="none">
+                  <IonLabel>
+                    <IonText color="primary">Plot:</IonText> {movie.Plot}
+                  </IonLabel>
+                </IonItem>
+              </IonCardContent>
+            </IonCard>
           </IonItem>
         ) : (
-          <p>Loading...</p>
+          <p>{t("loading")} ...</p>
         )}
       </IonContent>
     </IonPage>

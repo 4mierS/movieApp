@@ -29,6 +29,7 @@ import {
 import React, { useState } from "react"
 import { addOutline, removeOutline } from "ionicons/icons"
 import SkeletonItem from "../components/SkeletonItem"
+import { useTranslation } from "react-i18next"
 
 export const genres = [
   "action",
@@ -194,6 +195,8 @@ const RandomSearch: React.FC = () => {
     return Math.floor(Math.random() * (max - min + 1)) + min
   }
 
+  const { t, i18n } = useTranslation()
+
   return (
     <IonPage>
       <IonHeader>
@@ -201,11 +204,11 @@ const RandomSearch: React.FC = () => {
           {isPlatform("desktop") ? (
             <IonGrid>
               <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">Random</h1>
+                <h1 id="desktop-header-1">{t("random")}</h1>
               </IonRow>
             </IonGrid>
           ) : (
-            <IonTitle>Random</IonTitle>
+            <IonTitle>{t("random")}</IonTitle>
           )}
         </IonToolbar>
       </IonHeader>
@@ -214,7 +217,7 @@ const RandomSearch: React.FC = () => {
           <IonSelect
             value={type}
             onIonChange={handleGenreChange}
-            placeholder="Select Genre"
+            placeholder={t("select_genre")}
             disabled={selectedGenres.length >= 3}
           >
             {genres
@@ -253,7 +256,7 @@ const RandomSearch: React.FC = () => {
           fill="outline"
           onClick={showRandomMovie}
         >
-          Search
+          {t("search")}
         </IonButton>
 
         {!loaded ? (

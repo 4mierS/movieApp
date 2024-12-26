@@ -113,8 +113,8 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent>
-        <IonButton onClick={() => i18n.changeLanguage("en")}>English</IonButton>
-        <IonButton onClick={() => i18n.changeLanguage("de")}>Deutsch</IonButton>
+        <IonButton onClick={() => i18n.changeLanguage("en")}>{t("en")}</IonButton>
+        <IonButton onClick={() => i18n.changeLanguage("de")}>{t("de")}</IonButton>
         <IonSearchbar
           onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
           debounce={300}
@@ -142,84 +142,84 @@ const Home: React.FC = () => {
           {/* Überprüfe zuerst, ob results ein Array ist */}
           {results && Array.isArray(results)
             ? results.map((result: SearchResult, index: number) => (
-                <IonItemSliding key={index}>
-                  <IonItem button routerLink={`/movies/${result.imdbID}`}>
-                    <IonAvatar slot="start">
-                      <IonImg src={result.Poster}></IonImg>
-                    </IonAvatar>
-                    <IonLabel className="ion-text-wrap">
-                      {result.Title}
-                    </IonLabel>
-                    {result.Type === "moive" && (
-                      <IonIcon slot="end" icon={videocamOutline} />
-                    )}
-                    {result.Type === "series" && (
-                      <IonIcon slot="end" icon={tvOutline} />
-                    )}
-                    {result.Type === "game" && (
-                      <IonIcon slot="end" icon={gameControllerOutline} />
-                    )}
+              <IonItemSliding key={index}>
+                <IonItem button routerLink={`/movies/${result.imdbID}`}>
+                  <IonAvatar slot="start">
+                    <IonImg src={result.Poster}></IonImg>
+                  </IonAvatar>
+                  <IonLabel className="ion-text-wrap">
+                    {result.Title}
+                  </IonLabel>
+                  {result.Type === "moive" && (
                     <IonIcon slot="end" icon={videocamOutline} />
-                  </IonItem>
-                  <IonItemOptions>
-                    <IonItemOption
-                      onClick={() =>
-                        toggleItem(
-                          {
-                            ...result,
-                            EpisodeCounter: 1,
-                            SeasonCounter: 1,
-                            stoppedOn: "",
-                          },
-                          "favorites"
-                        )
-                      }
-                    >
-                      <IonIcon
-                        slot="top"
-                        size="small"
-                        icon={
-                          isInList(result.imdbID, "favorites")
-                            ? heart
-                            : heartOutline
-                        }
-                      ></IonIcon>
-                      Favorite
-                    </IonItemOption>
-                    <IonItemOption
-                      color="success"
-                      onClick={() =>
-                        toggleItem(
-                          {
-                            ...result,
-                            EpisodeCounter: 1,
-                            SeasonCounter: 1,
-                            stoppedOn: "",
-                          },
-                          "watchlist"
-                        )
-                      }
-                    >
-                      <IonIcon
-                        slot="top"
-                        size="small"
-                        icon={
-                          isInList(result.imdbID, "watchlist")
-                            ? glasses
-                            : glassesOutline
-                        }
-                      ></IonIcon>
-                      Watched
-                    </IonItemOption>
-                  </IonItemOptions>
-                </IonItemSliding>
-              ))
-            : results &&
-              (results as SearchError).Response === "False" && (
-                <IonItem>
-                  <IonLabel>{(results as SearchError).Error}</IonLabel>
+                  )}
+                  {result.Type === "series" && (
+                    <IonIcon slot="end" icon={tvOutline} />
+                  )}
+                  {result.Type === "game" && (
+                    <IonIcon slot="end" icon={gameControllerOutline} />
+                  )}
+                  <IonIcon slot="end" icon={videocamOutline} />
                 </IonItem>
-              )}
+                <IonItemOptions>
+                  <IonItemOption
+                    onClick={() =>
+                      toggleItem(
+                        {
+                          ...result,
+                          EpisodeCounter: 1,
+                          SeasonCounter: 1,
+                          stoppedOn: "",
+                        },
+                        "favorites"
+                      )
+                    }
+                  >
+                    <IonIcon
+                      slot="top"
+                      size="small"
+                      icon={
+                        isInList(result.imdbID, "favorites")
+                          ? heart
+                          : heartOutline
+                      }
+                    ></IonIcon>
+                    {t("favorites")}
+                  </IonItemOption>
+                  <IonItemOption
+                    color="success"
+                    onClick={() =>
+                      toggleItem(
+                        {
+                          ...result,
+                          EpisodeCounter: 1,
+                          SeasonCounter: 1,
+                          stoppedOn: "",
+                        },
+                        "watchlist"
+                      )
+                    }
+                  >
+                    <IonIcon
+                      slot="top"
+                      size="small"
+                      icon={
+                        isInList(result.imdbID, "watchlist")
+                          ? glasses
+                          : glassesOutline
+                      }
+                    ></IonIcon>
+                    {t("watchlist")}
+                  </IonItemOption>
+                </IonItemOptions>
+              </IonItemSliding>
+            ))
+            : results &&
+            (results as SearchError).Response === "False" && (
+              <IonItem>
+                <IonLabel>{(results as SearchError).Error}</IonLabel>
+              </IonItem>
+            )}
         </IonList>
       </IonContent>
     </IonPage>
