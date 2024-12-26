@@ -20,6 +20,7 @@ import { heart, sadOutline } from "ionicons/icons"
 import { useList } from "../components/Lists"
 import { isPlatform } from "@ionic/react"
 import "./Home.css"
+import { useTranslation } from "react-i18next"
 
 /**
  * Die Komponente Favorite zeigt die favorisierten Filme an.
@@ -28,6 +29,7 @@ import "./Home.css"
  */
 const Favorite: React.FC = () => {
   const { favorites, toggleItem } = useList()
+  const { t, i18n } = useTranslation()
 
   return (
     <IonPage>
@@ -36,11 +38,11 @@ const Favorite: React.FC = () => {
           {isPlatform("desktop") ? (
             <IonGrid>
               <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">Favorite</h1>
+                <h1 id="desktop-header-1">{t("favorites")}</h1>
               </IonRow>
             </IonGrid>
           ) : (
-            <IonTitle>Favorite</IonTitle>
+            <IonTitle>{t("favorites")}</IonTitle>
           )}
         </IonToolbar>
       </IonHeader>

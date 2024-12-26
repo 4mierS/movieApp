@@ -18,6 +18,9 @@
   "de": "German",
   "en": "English",
   "cancel": "Cancel",
+  "type": "Search Type",
+
+  "favorites": "Favorites",
 
   "watchlist": "Watchlist",
   "seasons": "Seasons",

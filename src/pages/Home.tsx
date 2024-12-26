@@ -120,20 +120,20 @@ const Home: React.FC = () => {
           debounce={300}
           value={searchTerm}
           animated={true}
-          placeholder="Search"
+          placeholder={t("search")}
         ></IonSearchbar>
 
         <IonItem>
           <IonLabel>
-            Select SearchType
+            <h2>{t("type")}</h2>
             <IonSelect
               value={type}
               onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
             >
-              <IonSelectOption value="">All</IonSelectOption>
-              <IonSelectOption value="movie">Movie</IonSelectOption>
-              <IonSelectOption value="series">Series</IonSelectOption>
-              <IonSelectOption value="episode">Episode</IonSelectOption>
+              <IonSelectOption value="">{t("all")}</IonSelectOption>
+              <IonSelectOption value="movie">{t("movies")}</IonSelectOption>
+              <IonSelectOption value="series">{t("series")}</IonSelectOption>
+              <IonSelectOption value="episode">{t("episodes")}</IonSelectOption>
             </IonSelect>
           </IonLabel>
         </IonItem>
