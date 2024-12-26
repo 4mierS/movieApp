@@ -1,0 +1,26 @@
+{
+  "home": "Home",
+  "all": "All",
+  "movies": "Movies",
+  "series": "Series",
+  "search": "Search",
+  "profile": "Profile",
+  "logout": "Logout",
+  "login": "Login",
+  "register": "Register",
+  "email": "E-Mail",
+  "password": "Password",
+  "password_confirmation": "Confirm Password",
+  "username": "Username",
+  "name": "Name",
+  "submit": "Submit",
+  "language": "Language",
+  "de": "German",
+  "en": "English",
+  "cancel": "Cancel",
+
+  "watchlist": "Watchlist",
+  "seasons": "Seasons",
+  "episodes": "Episoden",
+  "stopped_on": "Gestoppt um"
+}

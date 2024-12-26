@@ -1,0 +1,26 @@
+{
+  "home": "Startseite",
+  "all": "Alle",
+  "movies": "Filme",
+  "series": "Serien",
+  "search": "Suche",
+  "profile": "Profil",
+  "logout": "Abmelden",
+  "login": "Anmelden",
+  "register": "Registrieren",
+  "email": "E-Mail",
+  "password": "Passwort",
+  "password_confirmation": "Passwort bestätigen",
+  "username": "Benutzername",
+  "name": "Name",
+  "submit": "Absenden",
+  "language": "Sprache",
+  "de": "Deutsch",
+  "en": "Englisch",
+  "cancel": "Abbrechen",
+
+  "watchlist": "Beobachtungsliste",
+  "seasons": "Staffeln",
+  "episodes": "Episoden",
+  "stopped_on": "Gestoppt um"
+}
