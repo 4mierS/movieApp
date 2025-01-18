@@ -21,6 +21,7 @@ import { useList } from "../components/Lists"
 import { isPlatform } from "@ionic/react"
 import "./Home.css"
 import { useTranslation } from "react-i18next"
+import './../theme/variables.css';
 
 /**
  * Die Komponente Favorite zeigt die favorisierten Filme an.
@@ -30,6 +31,21 @@ import { useTranslation } from "react-i18next"
 const Favorite: React.FC = () => {
   const { favorites, toggleItem } = useList()
   const { t, i18n } = useTranslation()
+
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.body.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.body.classList.remove("dark");
+    }
+  }, []);
+
 
   return (
     <IonPage>

@@ -26,10 +26,11 @@ import {
   IonToolbar,
   isPlatform,
 } from "@ionic/react"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { addOutline, removeOutline } from "ionicons/icons"
 import SkeletonItem from "../components/SkeletonItem"
 import { useTranslation } from "react-i18next"
+import './../theme/variables.css';
 
 export const genres = [
   "action",
@@ -70,6 +71,19 @@ const RandomSearch: React.FC = () => {
   const [loaded, setLoaded] = useState<boolean>(false)
 
   const MAX_LENGTH = 100
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.body.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.body.classList.remove("dark");
+    }
+  }, []);
 
   const truncateText = (text: string, isExpanded: boolean) => {
     if (isExpanded || text.length <= MAX_LENGTH) {

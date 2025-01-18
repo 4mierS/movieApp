@@ -105,6 +105,7 @@ const Home: React.FC = () => {
     loadData();
   }, [searchTerm, type]);
 
+
   return (
     <>
       {/* Menü für Hamburger */}

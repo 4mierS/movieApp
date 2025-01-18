@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   IonAvatar,
   IonButton,
@@ -20,10 +20,11 @@ import {
   IonDatetime,
   IonDatetimeButton,
 } from "@ionic/react"
-import { glasses, sadOutline, pencil } from "ionicons/icons"
+import { glasses, sadOutline, pencil, informationOutline } from "ionicons/icons"
 import { useList, ListItem } from "../components/Lists"
 import { isPlatform } from "@ionic/react"
 import { useTranslation } from "react-i18next"
+import './../theme/variables.css';
 
 /**
  * Die Komponente Watchlist zeigt die Filme in der Watchlist an.
@@ -39,6 +40,21 @@ const Watchlist: React.FC = () => {
   const [episodeCounter, setEpisodeCounter] = useState<number>(1)
   const [stoppedOn, setStoppedOn] = useState<string>("")
   const { t, i18n } = useTranslation()
+
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.body.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.body.classList.remove("dark");
+    }
+  }, []);
+
 
   const openModal = (item: ListItem) => {
     setSelectedItem(item)
@@ -148,11 +164,12 @@ const Watchlist: React.FC = () => {
                         <IonIcon slot="icon-only" icon={glasses}></IonIcon>
                       </IonButton>
                     </IonCol>
-                    <IonCol size="auto">
-                      <IonItem
-                        button
+                    <IonCol size="4" className="ion-text-right">
+                      <IonButton
                         routerLink={`/movies/${list.imdbID}`}
-                      ></IonItem>
+                      >
+                        <IonIcon slot="icon-only" icon={informationOutline}></IonIcon>
+                      </IonButton>
                     </IonCol>
                   </IonRow>
                 </IonGrid>
@@ -265,7 +282,7 @@ const Watchlist: React.FC = () => {
           </div>
         </IonModal>
       </IonContent>
-    </IonPage>
+    </IonPage >
   )
 }
 

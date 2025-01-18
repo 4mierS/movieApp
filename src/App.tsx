@@ -32,6 +32,7 @@ import "@ionic/react/css/text-alignment.css"
 import "@ionic/react/css/text-transformation.css"
 import "@ionic/react/css/flex-utils.css"
 import "@ionic/react/css/display.css"
+import './theme/variables.css';
 
 /**
  * Ionic Dark Mode
@@ -49,10 +50,24 @@ import Details from "./pages/Details"
 import { useTranslation } from "react-i18next"
 import SplashScreen from "./components/SplashScreen"
 
+
 setupIonicReact()
 
 const App: React.FC = () => {
   const { t } = useTranslation()
+
+  const [darkMode, setDarkMode] = useState(false);
+
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.body.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.body.classList.remove("dark");
+    }
+  }, []);
 
   const [showSplash, setShowSplash] = useState(true)
 
