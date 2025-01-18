@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react"
 import Home from "./pages/Home"
 import Favorite from "./pages/Favorite"
 import Watchlist from "./pages/Watchlist"
@@ -49,10 +50,25 @@ import "@ionic/react/css/palettes/dark.system.css"
 import "./theme/variables.css"
 import Details from "./pages/Details"
 import { useTranslation } from "react-i18next"
+import SplashScreen from "./components/SplashScreen"
 
 setupIonicReact()
 const App: React.FC = () => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+
+  const [showSplash, setShowSplash] = useState(true)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSplash(false)
+    }, 3000)
+
+    return () => clearTimeout(timer)
+  }, [])
+
+  if (showSplash) {
+    return <SplashScreen />
+  }
 
   return (
     <IonApp>
