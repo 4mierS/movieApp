@@ -22,8 +22,7 @@ import useApi, { DetailsResult } from "../hooks/imdbAPI";
 import { star, starHalfOutline, starOutline, heart, heartOutline } from "ionicons/icons";
 import { useList } from "../components/Lists";
 import { useTranslation } from "react-i18next";
-import "./Details.css"; // Neue Datei für CSS-Styles
-import './../theme/variables.css';
+
 
 interface RouteParams {
   id: string;
