@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import useApi, { SearchResult, SearchType, SearchError } from "../hooks/imdbAPI"
+import { useEffect, useState } from "react";
+import useApi, { SearchResult, SearchType, SearchError } from "../hooks/imdbAPI";
 import {
   IonContent,
   IonHeader,
@@ -24,206 +24,202 @@ import {
   IonGrid,
   IonRow,
   IonButton,
-} from "@ionic/react"
-import {
-  videocamOutline,
-  tvOutline,
-  gameControllerOutline,
-  glassesOutline,
-  heart,
-  heartOutline,
-  glasses,
-} from "ionicons/icons"
-import { useList } from "../components/Lists"
-import { useTranslation } from "react-i18next"
+  IonMenu,
+  IonMenuButton,
+  IonButtons,
+  IonListHeader,
+  IonToggle,
+} from "@ionic/react";
+import { videocamOutline, tvOutline, gameControllerOutline, glassesOutline, heart, heartOutline, glasses, menuOutline } from "ionicons/icons";
+import { useList } from "../components/Lists";
+import { useTranslation } from "react-i18next";
 
 /**
  * Hier kann man nach Filmen und Serien suchen.
- *
  * Die Komponente Home zeigt die Suchergebnisse an.
- *
- * @return {*}
  */
 const Home: React.FC = () => {
-  const { searchData } = useApi()
-  const { toggleItem, isInList } = useList()
-  const { t, i18n } = useTranslation()
+  const { searchData } = useApi();
+  const { toggleItem, isInList } = useList();
+  const { t, i18n } = useTranslation();
 
-  /**
-   * State für die Suchbegriffe und den Suchtyp.
-   *
-   * @param {string} searchTerm
-   * @param {SearchType} type
-   * @param {(SearchResult[] | SearchError | null)} results
-   */
-  const [searchTerm, setSearchTerm] = useState("")
-  const [type, setType] = useState<SearchType>(SearchType.all)
-  const [results, setResults] = useState<SearchResult[] | SearchError | null>(
-    null
-  )
+  const [searchTerm, setSearchTerm] = useState("");
+  const [type, setType] = useState<SearchType>(SearchType.all);
+  const [results, setResults] = useState<SearchResult[] | SearchError | null>(null);
+  const [presentAlert] = useIonAlert();
+  const [loading, dismiss] = useIonLoading();
+  const [darkMode, setDarkMode] = useState(false); // State für Dark Mode
 
-  const [presentAlert] = useIonAlert()
-  const [loading, dismiss] = useIonLoading()
+  // Wechsel zwischen Dark und Light Mode
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => !prev);
+    document.body.classList.toggle("dark", !darkMode); // Ionic's eingebauter Dark Mode
+  };
 
   useEffect(() => {
     if (searchTerm === "") {
-      setResults([])
-      return
+      setResults([]);
+      return;
     }
     const loadData = async () => {
-      await loading()
+      await loading();
 
       try {
-        const result = await searchData(searchTerm, type)
+        const result = await searchData(searchTerm, type);
 
-        await dismiss()
+        await dismiss();
         if (result.Response === "False") {
           presentAlert({
             header: "Error",
             message: result.Error,
             buttons: ["OK"],
-          })
+          });
         } else {
-          setResults(result.Search)
+          setResults(result.Search);
         }
       } catch (error) {
-        console.error("Error fetching data: ", error)
+        console.error("Error fetching data: ", error);
         setResults({
           Error: "An unexpected error occurred",
           Response: "False",
-        })
+        });
       }
-    }
-    loadData()
-  }, [searchTerm, type])
+    };
+    loadData();
+  }, [searchTerm, type]);
 
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          {isPlatform("desktop") ? (
-            <IonGrid>
-              <IonRow className="ion-justify-content-center">
-                <h1 id="desktop-header-1">{t("home")}</h1>
-              </IonRow>
-            </IonGrid>
-          ) : (
-            <IonTitle>{t("home")}</IonTitle>
-          )}
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-        <IonButton onClick={() => i18n.changeLanguage("en")}>{t("en")}</IonButton>
-        <IonButton onClick={() => i18n.changeLanguage("de")}>{t("de")}</IonButton>
-        <IonSearchbar
-          onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
-          debounce={300}
-          value={searchTerm}
-          animated={true}
-          placeholder={t("search")}
-        ></IonSearchbar>
+    <>
+      {/* Menü für Hamburger */}
+      <IonMenu contentId="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>{t("menu")}</IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonList>
+            <IonListHeader>{t("settings")}</IonListHeader>
+            <IonItem>
+              <IonLabel>{t("dark_mode")}</IonLabel>
+              <IonToggle checked={darkMode} onIonChange={toggleDarkMode} />
+            </IonItem>
+            <IonItem>
+              <IonLabel>{t("language")}</IonLabel>
+              <IonSelect
+                value={i18n.language}
+                onIonChange={(e: CustomEvent) => i18n.changeLanguage(e.detail.value)}
+              >
+                <IonSelectOption value="en">{t("en")}</IonSelectOption>
+                <IonSelectOption value="de">{t("de")}</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+          </IonList>
+        </IonContent>
+      </IonMenu>
 
-        <IonItem>
-          <IonLabel>
-            <h2>{t("type")}</h2>
-            <IonSelect
-              value={type}
-              onIonChange={(e: CustomEvent) => setType(e.detail.value!)}
-            >
-              <IonSelectOption value="">{t("all")}</IonSelectOption>
-              <IonSelectOption value="movie">{t("movies")}</IonSelectOption>
-              <IonSelectOption value="series">{t("series")}</IonSelectOption>
-              <IonSelectOption value="episode">{t("episodes")}</IonSelectOption>
-            </IonSelect>
-          </IonLabel>
-        </IonItem>
-
-        <IonList>
-          {/* Überprüfe zuerst, ob results ein Array ist */}
-          {results && Array.isArray(results)
-            ? results.map((result: SearchResult, index: number) => (
-              <IonItemSliding key={index}>
-                <IonItem button routerLink={`/movies/${result.imdbID}`}>
-                  <IonAvatar slot="start">
-                    <IonImg src={result.Poster}></IonImg>
-                  </IonAvatar>
-                  <IonLabel className="ion-text-wrap">
-                    {result.Title}
-                  </IonLabel>
-                  {result.Type === "moive" && (
-                    <IonIcon slot="end" icon={videocamOutline} />
-                  )}
-                  {result.Type === "series" && (
-                    <IonIcon slot="end" icon={tvOutline} />
-                  )}
-                  {result.Type === "game" && (
-                    <IonIcon slot="end" icon={gameControllerOutline} />
-                  )}
-                  <IonIcon slot="end" icon={videocamOutline} />
-                </IonItem>
-                <IonItemOptions>
-                  <IonItemOption
-                    onClick={() =>
-                      toggleItem(
-                        {
-                          ...result,
-                          EpisodeCounter: 1,
-                          SeasonCounter: 1,
-                          stoppedOn: "",
-                        },
-                        "favorites"
-                      )
-                    }
-                  >
-                    <IonIcon
-                      slot="top"
-                      size="small"
-                      icon={
-                        isInList(result.imdbID, "favorites")
-                          ? heart
-                          : heartOutline
-                      }
-                    ></IonIcon>
-                    {t("favorites")}
-                  </IonItemOption>
-                  <IonItemOption
-                    color="success"
-                    onClick={() =>
-                      toggleItem(
-                        {
-                          ...result,
-                          EpisodeCounter: 1,
-                          SeasonCounter: 1,
-                          stoppedOn: "",
-                        },
-                        "watchlist"
-                      )
-                    }
-                  >
-                    <IonIcon
-                      slot="top"
-                      size="small"
-                      icon={
-                        isInList(result.imdbID, "watchlist")
-                          ? glasses
-                          : glassesOutline
-                      }
-                    ></IonIcon>
-                    {t("watchlist")}
-                  </IonItemOption>
-                </IonItemOptions>
-              </IonItemSliding>
-            ))
-            : results &&
-            (results as SearchError).Response === "False" && (
-              <IonItem>
-                <IonLabel>{(results as SearchError).Error}</IonLabel>
-              </IonItem>
+      {/* Hauptseite */}
+      <IonPage id="main-content">
+        <IonHeader>
+          <IonToolbar>
+            <IonButtons slot="start">
+              <IonMenuButton>
+                <IonIcon icon={menuOutline} />
+              </IonMenuButton>
+            </IonButtons>
+            {isPlatform("desktop") ? (
+              <IonGrid>
+                <IonRow className="ion-justify-content-center">
+                  <h1 id="desktop-header-1">{t("home")}</h1>
+                </IonRow>
+              </IonGrid>
+            ) : (
+              <IonTitle>{t("home")}</IonTitle>
             )}
-        </IonList>
-      </IonContent>
-    </IonPage>
-  )
-}
+          </IonToolbar>
+        </IonHeader>
+        <IonContent>
+          <IonSearchbar
+            onIonChange={(e: CustomEvent) => setSearchTerm(e.detail.value!)}
+            debounce={300}
+            value={searchTerm}
+            animated={true}
+            placeholder={t("search")}
+          ></IonSearchbar>
 
-export default Home
+          <IonItem>
+            <IonLabel>
+              <h2>{t("type")}</h2>
+              <IonSelect value={type} onIonChange={(e: CustomEvent) => setType(e.detail.value!)}>
+                <IonSelectOption value="">{t("all")}</IonSelectOption>
+                <IonSelectOption value="movie">{t("movies")}</IonSelectOption>
+                <IonSelectOption value="series">{t("series")}</IonSelectOption>
+                <IonSelectOption value="episode">{t("episodes")}</IonSelectOption>
+              </IonSelect>
+            </IonLabel>
+          </IonItem>
+
+          <IonList>
+            {results && Array.isArray(results)
+              ? results.map((result: SearchResult, index: number) => (
+                <IonItemSliding key={index}>
+                  <IonItem button routerLink={`/movies/${result.imdbID}`}>
+                    <IonAvatar slot="start">
+                      <IonImg src={result.Poster}></IonImg>
+                    </IonAvatar>
+                    <IonLabel className="ion-text-wrap">{result.Title}</IonLabel>
+                    {result.Type === "movie" && <IonIcon slot="end" icon={videocamOutline} />}
+                    {result.Type === "series" && <IonIcon slot="end" icon={tvOutline} />}
+                    {result.Type === "game" && <IonIcon slot="end" icon={gameControllerOutline} />}
+                  </IonItem>
+                  <IonItemOptions>
+                    <IonItemOption
+                      onClick={() =>
+                        toggleItem(
+                          {
+                            ...result,
+                            EpisodeCounter: 1,
+                            SeasonCounter: 1,
+                            stoppedOn: "",
+                          },
+                          "favorites"
+                        )
+                      }
+                    >
+                      <IonIcon slot="top" size="small" icon={isInList(result.imdbID, "favorites") ? heart : heartOutline}></IonIcon>
+                      {t("favorites")}
+                    </IonItemOption>
+                    <IonItemOption
+                      color="success"
+                      onClick={() =>
+                        toggleItem(
+                          {
+                            ...result,
+                            EpisodeCounter: 1,
+                            SeasonCounter: 1,
+                            stoppedOn: "",
+                          },
+                          "watchlist"
+                        )
+                      }
+                    >
+                      <IonIcon slot="top" size="small" icon={isInList(result.imdbID, "watchlist") ? glasses : glassesOutline}></IonIcon>
+                      {t("watchlist")}
+                    </IonItemOption>
+                  </IonItemOptions>
+                </IonItemSliding>
+              ))
+              : results &&
+              (results as SearchError).Response === "False" && (
+                <IonItem>
+                  <IonLabel>{(results as SearchError).Error}</IonLabel>
+                </IonItem>
+              )}
+          </IonList>
+        </IonContent>
+      </IonPage>
+    </>
+  );
+};
+
+export default Home;
