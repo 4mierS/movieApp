@@ -65,3 +65,32 @@ body.dark {
   --ion-input-background: #333333; /* Eingabefeld-Hintergrund */
   --ion-input-color: #ffffff; /* Eingabetextfarbe */
 }
+
+ion-label,
+ion-card-title {
+  color: var(--ion-text-color); /* Nutzt die definierte Textfarbe */
+  font-weight: bold;
+}
+
+/* Spezifische Anpassungen für Card Titles */
+ion-card-title {
+  color: var(--ion-color-primary); /* Primäre Farbe als Textfarbe für Titel */
+  font-size: 1.2rem; /* Etwas größere Schriftgröße für Card-Titel */
+}
+
+/* Verbesserung der Lesbarkeit von Buttons und Eingabefeldern */
+ion-button,
+ion-input {
+  color: var(--ion-text-color);
+  border: 1px solid var(--ion-input-border); /* Eingabefeld-Rand */
+}
+
+ion-button {
+  background-color: var(--ion-color-primary);
+  color: var(--ion-color-primary-contrast);
+}
+
+ion-input {
+  background-color: var(--ion-input-background);
+  color: var(--ion-input-color);
+}

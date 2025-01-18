@@ -51,11 +51,24 @@ const Home: React.FC = () => {
   const [loading, dismiss] = useIonLoading();
   const [darkMode, setDarkMode] = useState(false);
 
+  // Dark Mode beim Laden aus localStorage holen
+  useEffect(() => {
+    const savedMode = localStorage.getItem("theme");
+    if (savedMode === "dark") {
+      setDarkMode(true);
+      document.body.classList.add("dark");
+    } else {
+      setDarkMode(false);
+      document.body.classList.remove("dark");
+    }
+  }, []);
 
+  // Dark Mode umschalten und speichern
   const toggleDarkMode = () => {
     setDarkMode((prev) => {
       const isDark = !prev;
       document.body.classList.toggle("dark", isDark);
+      localStorage.setItem("theme", isDark ? "dark" : "light"); // Speichern des Modus in localStorage
       return isDark;
     });
   };
@@ -91,7 +104,6 @@ const Home: React.FC = () => {
     };
     loadData();
   }, [searchTerm, type]);
-
 
   return (
     <>
