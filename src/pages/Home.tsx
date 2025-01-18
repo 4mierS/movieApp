@@ -33,6 +33,7 @@ import {
 import { videocamOutline, tvOutline, gameControllerOutline, glassesOutline, heart, heartOutline, glasses, menuOutline } from "ionicons/icons";
 import { useList } from "../components/Lists";
 import { useTranslation } from "react-i18next";
+import './../theme/variables.css';
 
 /**
  * Hier kann man nach Filmen und Serien suchen.
@@ -48,12 +49,15 @@ const Home: React.FC = () => {
   const [results, setResults] = useState<SearchResult[] | SearchError | null>(null);
   const [presentAlert] = useIonAlert();
   const [loading, dismiss] = useIonLoading();
-  const [darkMode, setDarkMode] = useState(false); // State für Dark Mode
+  const [darkMode, setDarkMode] = useState(false);
 
-  // Wechsel zwischen Dark und Light Mode
+
   const toggleDarkMode = () => {
-    setDarkMode((prev) => !prev);
-    document.body.classList.toggle("dark", !darkMode); // Ionic's eingebauter Dark Mode
+    setDarkMode((prev) => {
+      const isDark = !prev;
+      document.body.classList.toggle("dark", isDark);
+      return isDark;
+    });
   };
 
   useEffect(() => {
@@ -88,6 +92,7 @@ const Home: React.FC = () => {
     loadData();
   }, [searchTerm, type]);
 
+
   return (
     <>
       {/* Menü für Hamburger */}
@@ -100,9 +105,12 @@ const Home: React.FC = () => {
         <IonContent>
           <IonList lines="none" className="watchlist-list">
             <IonListHeader>{t("settings")}</IonListHeader>
-            <IonItem className="watchlist-item">
-              <IonLabel>{t("dark_mode")}</IonLabel>
-              <IonToggle checked={darkMode} onIonChange={toggleDarkMode} />
+            <IonItem lines="none">
+              <IonToggle
+                checked={darkMode}
+                onIonChange={(e: CustomEvent) => toggleDarkMode()}
+                slot="end"
+              />
             </IonItem>
             <IonItem>
               <IonLabel>{t("language")}</IonLabel>

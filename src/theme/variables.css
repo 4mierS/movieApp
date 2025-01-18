@@ -1,0 +1,67 @@
+/** Ionic Light Mode CSS Variables **/
+:root {
+  --ion-color-primary: #ff5722; /* Sanftes Orange als primäre Farbe */
+  --ion-color-primary-contrast: #ffffff;
+
+  --ion-color-secondary: #b71c1c; /* Dunkelrot für sekundäre Schaltflächen */
+  --ion-color-secondary-contrast: #ffffff;
+
+  --ion-color-tertiary: #1e88e5; /* Blau für Tertiärfarben */
+  --ion-color-tertiary-contrast: #ffffff;
+
+  --ion-color-success: #00c853;
+  --ion-color-warning: #ffb300;
+  --ion-color-danger: #ff5252;
+
+  --ion-background-color: #ffffff; /* Weißer Hintergrund */
+  --ion-background-color-contrast: #000000;
+
+  --ion-text-color: #212121; /* Dunkelgrau für Text */
+  --ion-text-color-contrast: #ffffff;
+
+  --ion-item-background: #f7f7f7; /* Heller Hintergrund für Listenelemente */
+  --ion-item-background-hover: #e5e5e5;
+
+  --ion-tabbar-background: #ffffff;
+  --ion-tabbar-color: #ff5722; /* Orange für den Text in der Tabbar */
+
+  --ion-label-color: #212121; /* Dunkelgrau für Label */
+  --ion-icon-color: #ff5722; /* Orange für Icons */
+
+  --ion-input-background: #f1f1f1; /* Eingabefeld-Hintergrund */
+  --ion-input-color: #212121; /* Eingabetextfarbe */
+}
+
+/** Ionic Dark Mode CSS Variables **/
+body.dark {
+  --ion-color-primary: #b71c1c; /* Dunkelrot als primäre Farbe, passend für Filme und Serien */
+  --ion-color-primary-contrast: #ffffff;
+
+  --ion-color-secondary: #ff5722; /* Sanftes Orange für sekundäre Schaltflächen */
+  --ion-color-secondary-contrast: #000000;
+
+  --ion-color-tertiary: #1e88e5; /* Blau für Tertiärfarben */
+  --ion-color-tertiary-contrast: #ffffff;
+
+  --ion-color-success: #00c853; /* Erfolgsfarbe */
+  --ion-color-warning: #ffb300;
+  --ion-color-danger: #ff5252; /* Helles Rot für Gefahr */
+
+  --ion-background-color: #121212; /* Schwarzer Hintergrund */
+  --ion-background-color-contrast: #ffffff;
+
+  --ion-text-color: #ffffff; /* Weißer Text */
+  --ion-text-color-contrast: #000000;
+
+  --ion-item-background: #1e1e1e; /* Dunkle Hintergrund für Listenelemente */
+  --ion-item-background-hover: #333333;
+
+  --ion-tabbar-background: #1e1e1e;
+  --ion-tabbar-color: #ffffff;
+
+  --ion-label-color: #ffffff;
+  --ion-icon-color: #ffffff;
+
+  --ion-input-background: #333333; /* Eingabefeld-Hintergrund */
+  --ion-input-color: #ffffff; /* Eingabetextfarbe */
+}

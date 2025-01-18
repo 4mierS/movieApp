@@ -7,11 +7,13 @@ import { Redirect, Route } from "react-router-dom"
 import {
   IonApp,
   IonIcon,
+  IonItem,
   IonLabel,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
+  IonToggle,
   setupIonicReact,
 } from "@ionic/react"
 import { IonReactRouter } from "@ionic/react-router"
@@ -40,10 +42,9 @@ import "@ionic/react/css/display.css"
 
 //import '@ionic/react/css/palettes/dark.always.css';
 //import '@ionic/react/css/palettes/dark.class.css';
-import "@ionic/react/css/palettes/dark.system.css"
+
 
 /* Theme variables */
-import "./theme/variables.css"
 import Details from "./pages/Details"
 import { useTranslation } from "react-i18next"
 import SplashScreen from "./components/SplashScreen"
