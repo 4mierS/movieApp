@@ -98,9 +98,9 @@ const Home: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonContent>
-          <IonList>
+          <IonList lines="none" className="watchlist-list">
             <IonListHeader>{t("settings")}</IonListHeader>
-            <IonItem>
+            <IonItem className="watchlist-item">
               <IonLabel>{t("dark_mode")}</IonLabel>
               <IonToggle checked={darkMode} onIonChange={toggleDarkMode} />
             </IonItem>
@@ -129,7 +129,7 @@ const Home: React.FC = () => {
             </IonButtons>
             {isPlatform("desktop") ? (
               <IonGrid>
-                <IonRow className="ion-justify-content-center">
+                <IonRow className="ion-justify-content-center ion-padding">
                   <h1 id="desktop-header-1">{t("home")}</h1>
                 </IonRow>
               </IonGrid>
